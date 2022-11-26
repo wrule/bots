@@ -9,7 +9,5 @@
   "repository": "https://github.com/wrule/bots.git",
   "license": "MIT",
   "private": false,
-  "dependencies": {
-    "litebot": "^0.1.0"
-  }
+  "dependencies": {}
 }
