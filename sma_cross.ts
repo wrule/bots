@@ -1,13 +1,6 @@
 #!/usr/bin/env node
-import { sma } from 'tulind-wrapper';
-import { Bot } from 'litebot/dist/bot';
-import { TC } from 'litebot/dist/tc';
-import { SpotFull } from 'litebot/dist/executor/spot_full';
-import { fill_params } from 'litebot/dist/utils/cl_params';
-import { DingTalk } from 'litebot/dist/notifier/dingtalk';
-import { binance } from 'ccxt';
-import { SpotReal } from 'litebot/dist/executor/spot_real';
-import { KLineWatcher } from 'litebot/dist/watcher/kline_watcher';
+
+import { Bot, DingTalk, KLineWatcher, SpotFull, SpotReal, TC, ccxt, t, FillParams } from "litebot";
 
 export
 interface Signal
@@ -39,8 +32,8 @@ extends Bot<TC, Signal> {
   protected next(tcs: TC[], queue: Signal[] = []): Signal[] {
     const result = queue.concat(tcs as Signal[]);
     const close = result.map((item) => item.close);
-    const fast_line = sma(close, this.params.fast_period, true);
-    const slow_line = sma(close, this.params.slow_period, true);
+    const fast_line = t.sma(close, this.params.fast_period, true);
+    const slow_line = t.sma(close, this.params.slow_period, true);
     result.forEach((last, index) => {
       last.sma_fast = fast_line[index];
       last.sma_slow = slow_line[index];
@@ -73,9 +66,9 @@ extends Bot<TC, Signal> {
     funds: 15,
     assets: 0,
   };
-  fill_params(params);
+  FillParams(params);
   const notifier = new DingTalk(secret.notifier);
-  const exchange = new binance(secret.exchange);
+  const exchange = new ccxt.binance(secret.exchange);
   console.log('loading market...');
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
