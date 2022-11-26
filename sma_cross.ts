@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 import { sma } from 'tulind-wrapper';
-import { Bot } from '../bot';
-import { TC } from '../tc';
-import { SpotFull } from '../executor/spot_full';
-import { fill_params } from '../utils/cl_params';
-import { DingTalk } from '../notifier/dingtalk';
+import { Bot } from 'litebot/dist/bot';
+import { TC } from 'litebot/dist/tc';
+import { SpotFull } from 'litebot/dist/executor/spot_full';
+import { fill_params } from 'litebot/dist/utils/cl_params';
+import { DingTalk } from 'litebot/dist/notifier/dingtalk';
 import { binance } from 'ccxt';
-import { SpotReal } from '../executor/spot_real';
-import { KLineWatcher } from '../watcher/kline_watcher';
+import { SpotReal } from 'litebot/dist/executor/spot_real';
+import { KLineWatcher } from 'litebot/dist/watcher/kline_watcher';
 
 export
 interface Signal

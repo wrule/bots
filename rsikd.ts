@@ -1,7 +1,7 @@
 import { rsi, sma, _align } from 'tulind-wrapper';
-import { TC } from '../tc';
-import { Bot } from '../bot';
-import { SpotFull } from '../executor/spot_full';
+import { TC } from 'litebot/dist/tc';
+import { Bot } from 'litebot/dist/bot';
+import { SpotFull } from 'litebot/dist/executor/spot_full';
 
 export
 interface Signal
