@@ -1,7 +1,4 @@
-import { sma, _align } from 'tulind-wrapper';
-import { TC } from 'litebot/dist/tc';
-import { Bot } from 'litebot/dist/bot';
-import { SpotFull } from 'litebot/dist/executor/spot_full';
+import { Bot, SpotFull, TC, t } from "litebot";
 
 export
 interface Signal
@@ -35,12 +32,12 @@ extends Bot<TC, Signal> {
   protected next(tcs: TC[], queue: Signal[] = []) {
     const result = queue.concat(tcs as Signal[]);
     const close = result.map((item) => item.close);
-    const slow_line = sma(close, this.params.slow_period);
-    const fast_line = sma(close, this.params.fast_period, slow_line.length);
+    const slow_line = t.sma(close, this.params.slow_period);
+    const fast_line = t.sma(close, this.params.fast_period, slow_line.length);
     const diff = fast_line.map((item, index) => item - slow_line[index]);
-    const k = sma(diff, this.params.k_period);
-    const d = sma(k, this.params.d_period);
-    _align([k, d], close.length);
+    const k = t.sma(diff, this.params.k_period);
+    const d = t.sma(k, this.params.d_period);
+    t._align([k, d], close.length);
     result.forEach((last, index) => {
       last.k = k[index];
       last.d = d[index];
