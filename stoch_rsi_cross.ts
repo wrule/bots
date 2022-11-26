@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-import { binance } from 'ccxt';
-import { rsi, stoch, rsi_start, stoch_start } from 'tulind-wrapper';
-import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC } from 'litebot';
+import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC, ccxt, t } from 'litebot';
 
 export
 interface Signal
@@ -29,7 +27,7 @@ extends Bot<TC, Signal> {
   }
 
   public get length() {
-    return (rsi_start(this.params.rsi_period) + stoch_start({
+    return (t.rsi_start(this.params.rsi_period) + t.stoch_start({
       k_slowing_period: this.params.k_period,
       k_period: this.params.stoch_period,
       d_period: this.params.d_period,
@@ -39,8 +37,8 @@ extends Bot<TC, Signal> {
   protected next(tcs: TC[], queue: Signal[] = []) {
     const result = queue.concat(tcs as Signal[]);
     const close = result.map((item) => item.close);
-    const rsi_result = rsi(close, this.params.rsi_period);
-    const { stoch_k, stoch_d } = stoch(rsi_result, rsi_result, rsi_result, {
+    const rsi_result = t.rsi(close, this.params.rsi_period);
+    const { stoch_k, stoch_d } = t.stoch(rsi_result, rsi_result, rsi_result, {
       k_slowing_period: this.params.k_period,
       k_period: this.params.stoch_period,
       d_period: this.params.d_period,
@@ -81,7 +79,7 @@ extends Bot<TC, Signal> {
   };
   FillParams(params);
   const notifier = new DingTalk(secret.notifier);
-  const exchange = new binance(secret.exchange);
+  const exchange = new ccxt.binance(secret.exchange);
   console.log('loading market...');
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
