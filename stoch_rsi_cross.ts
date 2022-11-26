@@ -1,13 +1,7 @@
 #!/usr/bin/env node
-import { rsi, stoch, rsi_start, stoch_start } from 'tulind-wrapper';
-import { TC } from 'litebot/dist/tc';
-import { Bot } from 'litebot/dist/bot';
-import { SpotFull } from 'litebot/dist/executor/spot_full';
-import { fill_params } from 'litebot/dist/utils/cl_params';
-import { DingTalk } from 'litebot/dist/notifier/dingtalk';
 import { binance } from 'ccxt';
-import { SpotReal } from 'litebot/dist/executor/spot_real';
-import { KLineWatcher } from 'litebot/dist/watcher/kline_watcher';
+import { rsi, stoch, rsi_start, stoch_start } from 'tulind-wrapper';
+import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC } from 'litebot';
 
 export
 interface Signal
@@ -85,7 +79,7 @@ extends Bot<TC, Signal> {
     funds: 15,
     assets: 0,
   };
-  fill_params(params);
+  FillParams(params);
   const notifier = new DingTalk(secret.notifier);
   const exchange = new binance(secret.exchange);
   console.log('loading market...');
