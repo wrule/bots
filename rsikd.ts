@@ -1,6 +1,5 @@
 import { Bot, SpotFull, TC, t } from "litebot";
 
-
 export
 interface Signal
 extends TC {
