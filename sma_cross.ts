@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 import { Bot, DingTalk, KLineWatcher, SpotFull, SpotReal, TC, ccxt, t, FillParams } from "litebot";
 
 export
@@ -17,10 +16,7 @@ class SMACross
 extends Bot<TC, Signal> {
   public constructor(
     private readonly executor: SpotFull,
-    private readonly params: {
-      fast_period: number;
-      slow_period: number;
-    },
+    private readonly params: { fast_period: number; slow_period: number; },
   ) {
     super();
   }
@@ -57,11 +53,11 @@ extends Bot<TC, Signal> {
   if (require.main !== module) return;
   const secret = require('./.secret.json');
   const params = {
-    name: 'v2-test',
+    name: '墙头草',
     symbol: 'ETH/USDT',
     timeframe: '1m',
-    fast_period: 10,
-    slow_period: 40,
+    fast_period: 9,
+    slow_period: 44,
     interval: 0,
     funds: 15,
     assets: 0,
