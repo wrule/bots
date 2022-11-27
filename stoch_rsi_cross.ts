@@ -73,7 +73,7 @@ extends Bot<TC, Signal> {
     stoch_period: 3,
     k_period: 4,
     d_period: 5,
-    interval: 0,
+    interval: 1000,
     funds: 15,
     assets: 0,
   };

@@ -58,7 +58,7 @@ extends Bot<TC, Signal> {
     timeframe: '1m',
     fast_period: 9,
     slow_period: 44,
-    interval: 0,
+    interval: 1000,
     funds: 15,
     assets: 0,
   };
