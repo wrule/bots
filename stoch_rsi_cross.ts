@@ -83,7 +83,6 @@ extends Bot<TC, Signal> {
   console.log('loading market...');
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
-  // const executor = new SimpleSpot();
   const bot = new StochRSICross(executor, params);
   new KLineWatcher().RunBot({ exchange, bot, ...params });
 })();
