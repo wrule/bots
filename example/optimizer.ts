@@ -5,7 +5,7 @@ import { MAKD, Params } from '../makd';
 const data = require('../data/ETH_USDT-30m.json');
 
 function main() {
-  const kline = ArrayToKLine(data);
+  const kline = ArrayToKLine(data, false);
   const random = new Random<Params>();
   random.Search({
     domain: {
