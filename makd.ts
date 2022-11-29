@@ -1,4 +1,5 @@
-import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcher } from 'litebot';
+#!/usr/bin/env node
+import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcher, SpotSimpleTest } from 'litebot';
 
 export
 interface Params {
@@ -69,10 +70,10 @@ extends Bot<TC, Signal> {
     name: '跟风狗',
     symbol: 'ETH/USDT',
     timeframe: '1m',
-    fast_period: 2,
-    slow_period: 3,
-    k_period: 4,
-    d_period: 5,
+    fast_period: 33,
+    slow_period: 80,
+    k_period: 72,
+    d_period: 3,
     interval: 500,
     funds: 15,
     assets: 0,
