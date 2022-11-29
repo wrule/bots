@@ -1,6 +1,14 @@
 import { Bot, SpotFull, TC, t } from "litebot";
 
 export
+interface Params {
+  fast_period: number;
+  slow_period: number;
+  k_period: number;
+  d_period: number;
+}
+
+export
 interface Signal
 extends TC {
   k: number;
@@ -15,12 +23,7 @@ class MAKD
 extends Bot<TC, Signal> {
   public constructor(
     private readonly executor: SpotFull,
-    private readonly params: {
-      fast_period: number,
-      slow_period: number,
-      k_period: number,
-      d_period: number,
-    },
+    private readonly params: Params,
   ) {
     super();
   }
