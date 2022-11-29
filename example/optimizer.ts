@@ -1,7 +1,10 @@
-import { Random, SpotSimpleTest } from 'litebot';
+import { ArrayToKLine, Random, SpotSimpleTest } from 'litebot';
 import { MAKD, Params } from '../makd';
 
+const data = require('../data/ETH_USDT-30m.json');
+
 function main() {
+  const kline = ArrayToKLine(data);
   const random = new Random<Params>();
   random.Search({
     domain: {
@@ -13,8 +16,10 @@ function main() {
     target: (params) => {
       const executor = new SpotSimpleTest();
       const bot = new MAKD(executor, params);
-      bot.BackTestingBatch([]);
-      return executor.ROI(0);
+      bot.BackTestingBatch(kline);
+      return executor.ROI(kline[kline.length - 1].close);
     },
   });
 }
+
+main()
