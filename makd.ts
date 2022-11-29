@@ -29,7 +29,9 @@ extends Bot<TC, Signal> {
   }
 
   public get length() {
-    return 1000;
+    return t.sma_start(this.params.slow_period) +
+      t.sma_start(this.params.k_period) +
+      t.sma_start(this.params.d_period) + 2;
   }
 
   protected next(tcs: TC[], queue: Signal[] = []) {
