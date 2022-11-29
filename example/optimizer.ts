@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { ArrayToKLine, Random, SpotSimpleTest } from 'litebot';
 import { MAKD, Params } from '../makd';
 
