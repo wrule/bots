@@ -1,6 +1,13 @@
 import { Bot, SpotFull, TC, t } from "litebot";
 
 export
+interface Params {
+  rsi_period: number;
+  k_period: number;
+  d_period: number;
+}
+
+export
 interface Signal
 extends TC {
   k: number;
@@ -15,11 +22,7 @@ class RSIKD
 extends Bot<TC, Signal> {
   public constructor(
     private readonly executor: SpotFull,
-    private readonly params: {
-      rsi_period: number,
-      k_period: number,
-      d_period: number,
-    },
+    private readonly params: Params,
   ) {
     super();
   }
