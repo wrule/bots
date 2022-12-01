@@ -27,15 +27,16 @@ extends Bot<OHLCV, Signal> {
 
   protected next(tcs: OHLCV[], queue: Signal[] = []): Signal[] {
     const result = queue.concat(tcs as Signal[]);
-    const close = result.map((item) => item.close);
-    const fast_line = t.sma(close, this.params.fast_period, true);
-    const slow_line = t.sma(close, this.params.slow_period, true);
-    result.forEach((last, index) => {
+    const closed = result.filter((item) => item.closed);
+    const source = closed.map((item) => item.close);
+    const fast_line = t.sma(source, this.params.fast_period, true);
+    const slow_line = t.sma(source, this.params.slow_period, true);
+    closed.forEach((last, index) => {
       last.sma_fast = fast_line[index];
       last.sma_slow = slow_line[index];
       last.diff = last.sma_fast - last.sma_slow;
-      last.buy = result[index - 1]?.diff <= 0 && last.diff > 0;
-      last.sell = result[index - 1]?.diff >= 0 && last.diff < 0;
+      last.buy = closed[index - 1]?.diff <= 0 && last.diff > 0;
+      last.sell = closed[index - 1]?.diff >= 0 && last.diff < 0;
     });
     return result;
   }
