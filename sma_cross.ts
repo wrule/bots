@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import { Bot, DingTalk, KLineWatcher, SpotFull, SpotReal, TC, ccxt, t, FillParams } from "litebot";
+import { Bot, DingTalk, KLineWatcher, SpotFull, SpotReal, ccxt, t, FillParams, OHLCV } from "litebot";
 
 export
 interface Signal
-extends TC {
+extends OHLCV {
   sma_fast: number;
   sma_slow: number;
   diff: number;
@@ -13,7 +13,7 @@ extends TC {
 
 export
 class SMACross
-extends Bot<TC, Signal> {
+extends Bot<OHLCV, Signal> {
   public constructor(
     private readonly executor: SpotFull,
     private readonly params: { fast_period: number; slow_period: number; },
@@ -25,7 +25,7 @@ extends Bot<TC, Signal> {
     return this.params.slow_period + 1;
   }
 
-  protected next(tcs: TC[], queue: Signal[] = []): Signal[] {
+  protected next(tcs: OHLCV[], queue: Signal[] = []): Signal[] {
     const result = queue.concat(tcs as Signal[]);
     const close = result.map((item) => item.close);
     const fast_line = t.sma(close, this.params.fast_period, true);
