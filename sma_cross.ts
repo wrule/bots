@@ -52,16 +52,10 @@ extends Bot<OHLCV, Signal> {
   }
 
   protected exec(signal: Signal) {
-    if (signal.closed) {
-      if (signal.sell) {
-        this.executor.SellAll(signal.close);
-      } else if (signal.buy) {
-        this.executor.BuyAll(signal.close);
-      }
-    } else {
-      this.queue.pop();
-      this.stop(signal);
-    }
+    this.stop(signal);
+    if (signal.sell) this.executor.SellAll(signal.close);
+    else if (signal.buy) this.executor.BuyAll(signal.close);
+    if (!signal.closed) this.queue.pop();
   }
 }
 
