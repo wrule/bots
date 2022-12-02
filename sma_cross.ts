@@ -48,8 +48,8 @@ extends Bot<OHLCV, Signal> {
     if (!signal.closed) this.queue.pop();
     const stop_price = this.executor.Offset(this.stop);
     const take_price = this.executor.Offset(this.take);
-    if (signal.close <= stop_price) this.executor.SellAll(stop_price);
-    if (signal.close >= take_price) this.executor.SellAll(take_price);
+    if (signal.close <= stop_price) this.executor.SellAll(signal.opened ? signal.close : stop_price);
+    if (signal.close >= take_price) this.executor.SellAll(signal.opened ? signal.close : take_price);
     if (signal.sell) {
       this.executor.SellAll(signal.close);
     } else if (signal.buy) {
