@@ -2,6 +2,14 @@
 import { Bot, DingTalk, KLineWatcher, SpotFull, SpotReal, ccxt, t, FillParams, OHLCV } from "litebot";
 
 export
+interface Params {
+  fast_period: number;
+  slow_period: number;
+  stop: number;
+  take: number;
+}
+
+export
 interface Signal
 extends OHLCV {
   sma_fast: number;
@@ -14,10 +22,7 @@ extends OHLCV {
 export
 class SMACross
 extends Bot<OHLCV, Signal> {
-  public constructor(
-    private readonly executor: SpotFull,
-    private readonly params: { fast_period: number; slow_period: number; },
-  ) {
+  public constructor(private readonly executor: SpotFull, private readonly params: Params) {
     super();
   }
 
@@ -41,21 +46,21 @@ extends Bot<OHLCV, Signal> {
     return result;
   }
 
-  private stop_rate = -0.1;
-  private take_rate = 0.1;
-
   private stop(signal: Signal) {
-    const stop_price = this.executor.Offset(this.stop_rate);
-    const take_price = this.executor.Offset(this.take_rate);
-    if (signal.close <= stop_price) this.executor.SellAll(signal.opened ? signal.close : stop_price);
-    if (signal.close >= take_price) this.executor.SellAll(signal.opened ? signal.close : take_price);
+    const stop_price = this.executor.Offset(this.params.stop);
+    const take_price = this.executor.Offset(this.params.take);
+    const need_stop = signal.close <= stop_price;
+    const need_take = signal.close >= take_price;
+    if (need_stop) this.executor.SellAll(signal.opened ? signal.close : stop_price);
+    if (need_take) this.executor.SellAll(signal.opened ? signal.close : take_price);
+    return need_stop || need_take;
   }
 
   protected exec(signal: Signal) {
-    this.stop(signal);
+    if (!signal.closed) this.queue.pop();
+    if (this.stop(signal)) return;
     if (signal.sell) this.executor.SellAll(signal.close);
     else if (signal.buy) this.executor.BuyAll(signal.close);
-    if (!signal.closed) this.queue.pop();
   }
 }
 
@@ -68,6 +73,8 @@ extends Bot<OHLCV, Signal> {
     timeframe: '1m',
     fast_period: 9,
     slow_period: 44,
+    stop: 1,
+    take: 1e6,
     interval: 1000,
     funds: 15,
     assets: 0,
