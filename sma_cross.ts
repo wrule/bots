@@ -41,8 +41,19 @@ extends Bot<OHLCV, Signal> {
     return result;
   }
 
+  private stop_loss = -0.1;
+  private stop_profit = 0.1;
+
   protected exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
+    if (this.executor.Risk(signal.close) < this.stop_loss) {
+      // 止损
+      this.executor.SellAll(0);
+    }
+    if (this.executor.Risk(signal.close) > this.stop_profit) {
+      // 止盈
+      this.executor.SellAll(0);
+    }
     if (signal.sell) {
       this.executor.SellAll(signal.close);
     } else if (signal.buy) {
