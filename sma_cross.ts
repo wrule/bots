@@ -41,8 +41,15 @@ extends Bot<OHLCV, Signal> {
     return result;
   }
 
-  private stop = -0.1;
-  private take = 0.1;
+  private stop_rate = -0.1;
+  private take_rate = 0.1;
+
+  private stop(signal: Signal) {
+    const stop_price = this.executor.Offset(this.stop_rate);
+    const take_price = this.executor.Offset(this.take_rate);
+    if (signal.close <= stop_price) this.executor.SellAll(signal.opened ? signal.close : stop_price);
+    if (signal.close >= take_price) this.executor.SellAll(signal.opened ? signal.close : take_price);
+  }
 
   protected exec(signal: Signal) {
     if (signal.closed) {
@@ -53,10 +60,7 @@ extends Bot<OHLCV, Signal> {
       }
     } else {
       this.queue.pop();
-      const stop_price = this.executor.Offset(this.stop);
-      const take_price = this.executor.Offset(this.take);
-      if (signal.close <= stop_price) this.executor.SellAll(signal.opened ? signal.close : stop_price);
-      if (signal.close >= take_price) this.executor.SellAll(signal.opened ? signal.close : take_price);
+      this.stop(signal);
     }
   }
 }
