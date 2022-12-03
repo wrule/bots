@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Bot, DingTalk, SpotFull, SpotReal, ccxt, t, FillParams, OHLCV, KLineWatcherRT } from 'litebot';
+import { Bot, DingTalk, SpotFull, SpotReal, ccxt, t, FillParams, OHLCV, KLineWatcherRT, SpotSimpleTest } from 'litebot';
 
 export
 interface Params {
@@ -84,7 +84,7 @@ extends Bot<OHLCV, Signal> {
   const exchange = new ccxt.binance(secret.exchange);
   console.log('loading market...');
   await exchange.loadMarkets();
-  const executor = new SpotReal({ exchange, notifier, ...params });
+  const executor = new SpotSimpleTest();
   const bot = new SMACross(executor, params);
   new KLineWatcherRT().RunBot({ exchange, bot, ...params });
 })();
