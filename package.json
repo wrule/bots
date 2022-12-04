@@ -10,6 +10,6 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "litebot": "^0.1.12"
+    "litebot": "^0.1.13"
   }
 }
