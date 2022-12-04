@@ -70,7 +70,7 @@ extends Bot<OHLCV, Signal> {
   const params = {
     name: '墙头草',
     symbol: 'ETH/USDT',
-    timeframe: '2h',
+    timeframe: '1m',
     fast_period: 9,
     slow_period: 44,
     stop: 1,
