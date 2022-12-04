@@ -73,7 +73,7 @@ extends Bot<OHLCV, Signal> {
     timeframe: '1m',
     fast_period: 9,
     slow_period: 44,
-    stop: 0.004,
+    stop: -0.004,
     take: 0.008,
     interval: 1000,
     funds: 15,
