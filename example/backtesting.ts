@@ -10,8 +10,8 @@ function main() {
   const bot = new SMACross(executor, {
     fast_period: 9,
     slow_period: 44,
-    stop_rate: 0.03,
-    take_rate: 0.05,
+    stop_rate: 1,
+    take_rate: 1e6,
   });
   bot.BackTestingBatch(kline);
   console.log(executor.ROI(kline[kline.length - 1].close));
