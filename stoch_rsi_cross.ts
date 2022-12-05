@@ -55,6 +55,7 @@ extends Bot<TC, Signal> {
   }
 
   protected exec(signal: Signal) {
+    if (!signal.closed) this.queue.pop();
     if (signal.sell) {
       this.executor.SellAll(signal.close);
     } else if (signal.buy) {
