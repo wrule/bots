@@ -2,6 +2,14 @@
 import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC, ccxt, t } from 'litebot';
 
 export
+interface Params {
+  rsi_period: number;
+  stoch_period: number;
+  k_period: number;
+  d_period: number;
+}
+
+export
 interface Signal
 extends TC {
   k: number;
@@ -14,15 +22,7 @@ extends TC {
 export
 class StochRSICross
 extends Bot<TC, Signal> {
-  public constructor(
-    private readonly executor: SpotFull,
-    private readonly params: {
-      rsi_period: number,
-      stoch_period: number,
-      k_period: number,
-      d_period: number,
-    },
-  ) {
+  public constructor(private readonly executor: SpotFull, private readonly params: Params) {
     super();
   }
 
