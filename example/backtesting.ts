@@ -3,7 +3,7 @@ import { ArrayToKLine, ExpandKLine, SpotSimpleTest } from 'litebot';
 // import { StochRSICross } from '../stoch_rsi_cross';
 import { Clams } from '../clams';
 
-const data = require('../data/ETH_USDT-1m.json');
+const data = require('../data/ETH_USDT-1d.json');
 
 function main() {
   const kline = ArrayToKLine(data, false);
