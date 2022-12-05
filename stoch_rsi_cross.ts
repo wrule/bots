@@ -48,8 +48,8 @@ extends Bot<TC, Signal> {
       last.k = stoch_k[index];
       last.d = stoch_d[index];
       last.diff = stoch_k[index] - stoch_d[index];
-      last.buy = result[index - 1]?.diff <= 0 && last.diff > 0;
-      last.sell = result[index - 1]?.diff >= 0 && last.diff < 0;
+      last.buy = closed[index - 1]?.diff <= 0 && last.diff > 0;
+      last.sell = closed[index - 1]?.diff >= 0 && last.diff < 0;
     });
     return result;
   }
