@@ -12,6 +12,8 @@ function main() {
     k_period: 32,
     d_period: 45,
     stoch_period: 45,
+    stop_rate: 1,
+    take_rate: 1e6,
   });
   bot.BackTestingBatch(kline);
   console.log(executor.ROI(kline[kline.length - 1].close));
