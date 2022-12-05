@@ -7,6 +7,8 @@ interface Params {
   stoch_period: number;
   k_period: number;
   d_period: number;
+  stop_rate: number;
+  take_rate: number;
 }
 
 export
@@ -54,13 +56,21 @@ extends Bot<TC, Signal> {
     return result;
   }
 
+  private stop(signal: Signal) {
+    const stop_price = this.executor.Offset(-this.params.stop_rate);
+    const take_price = this.executor.Offset(this.params.take_rate);
+    const need_stop = signal.close <= stop_price;
+    const need_take = signal.close >= take_price;
+    if (need_stop) this.executor.SellAll(signal.opened ? signal.close : stop_price);
+    else if (need_take) this.executor.SellAll(signal.opened ? signal.close : take_price);
+    return need_stop || need_take;
+  }
+
   protected exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
-    if (signal.sell) {
-      this.executor.SellAll(signal.close);
-    } else if (signal.buy) {
-      this.executor.BuyAll(signal.close);
-    }
+    if (this.stop(signal)) return;
+    if (signal.sell) this.executor.SellAll(signal.close);
+    else if (signal.buy) this.executor.BuyAll(signal.close);
   }
 }
 
@@ -75,6 +85,8 @@ extends Bot<TC, Signal> {
     stoch_period: 3,
     k_period: 4,
     d_period: 5,
+    stop_rate: 1,
+    take_rate: 1e6,
     interval: 1000,
     funds: 15,
     assets: 0,
