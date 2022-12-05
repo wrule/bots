@@ -5,8 +5,8 @@ export
 interface Params {
   fast_period: number;
   slow_period: number;
-  stop: number;
-  take: number;
+  stop_rate: number;
+  take_rate: number;
 }
 
 export
@@ -47,8 +47,8 @@ extends Bot<OHLCV, Signal> {
   }
 
   private stop(signal: Signal) {
-    const stop_price = this.executor.Offset(this.params.stop);
-    const take_price = this.executor.Offset(this.params.take);
+    const stop_price = this.executor.Offset(-this.params.stop_rate);
+    const take_price = this.executor.Offset(this.params.take_rate);
     const need_stop = signal.close <= stop_price;
     const need_take = signal.close >= take_price;
     if (need_stop) this.executor.SellAll(signal.opened ? signal.close : stop_price);
@@ -73,8 +73,8 @@ extends Bot<OHLCV, Signal> {
     timeframe: '1m',
     fast_period: 9,
     slow_period: 44,
-    stop: -0.004,
-    take: 0.008,
+    stop_rate: 0.004,
+    take_rate: 0.008,
     interval: 1000,
     funds: 15,
     assets: 0,
