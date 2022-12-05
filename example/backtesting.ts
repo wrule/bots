@@ -5,7 +5,7 @@ import { StochRSICross } from '../stoch_rsi_cross';
 const data = require('../data/ETH_USDT-30m.json');
 
 function main() {
-  const kline = ArrayToKLine(data, false);
+  const kline = ExpandKLine(ArrayToKLine(data, false), 0.5);
   const executor = new SpotSimpleTest();
   const bot = new StochRSICross(executor, {
     rsi_period: 13,

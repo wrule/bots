@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC, ccxt, t } from 'litebot';
+import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC, ccxt, t, OHLCV } from 'litebot';
 
 export
 interface Params {
@@ -11,7 +11,7 @@ interface Params {
 
 export
 interface Signal
-extends TC {
+extends OHLCV {
   k: number;
   d: number;
   diff: number;
@@ -36,14 +36,15 @@ extends Bot<TC, Signal> {
 
   protected next(tcs: TC[], queue: Signal[] = []) {
     const result = queue.concat(tcs as Signal[]);
-    const close = result.map((item) => item.close);
-    const rsi_result = t.rsi(close, this.params.rsi_period);
+    const closed = result.filter((item) => item.closed);
+    const source = closed.map((item) => item.close);
+    const rsi_result = t.rsi(source, this.params.rsi_period);
     const { stoch_k, stoch_d } = t.stoch(rsi_result, rsi_result, rsi_result, {
       k_slowing_period: this.params.k_period,
       k_period: this.params.stoch_period,
       d_period: this.params.d_period,
-    }, close.length);
-    result.forEach((last, index) => {
+    }, closed.length);
+    closed.forEach((last, index) => {
       last.k = stoch_k[index];
       last.d = stoch_d[index];
       last.diff = stoch_k[index] - stoch_d[index];
