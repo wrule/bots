@@ -52,7 +52,7 @@ extends Bot<OHLCV, Signal> {
     const need_stop = signal.close <= stop_price;
     const need_take = signal.close >= take_price;
     if (need_stop) this.executor.SellAll(signal.opened ? signal.close : stop_price);
-    if (need_take) this.executor.SellAll(signal.opened ? signal.close : take_price);
+    else if (need_take) this.executor.SellAll(signal.opened ? signal.close : take_price);
     return need_stop || need_take;
   }
 
