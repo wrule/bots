@@ -1,17 +1,14 @@
 #!/usr/bin/env node
 import { ArrayToKLine, ExpandKLine, SpotSimpleTest } from 'litebot';
-import { StochRSICross } from '../stoch_rsi_cross';
+// import { StochRSICross } from '../stoch_rsi_cross';
+import { Clams } from '../clams';
 
-const data = require('../data/ETH_USDT-30m.json');
+const data = require('../data/ETH_USDT-1m.json');
 
 function main() {
-  const kline = ExpandKLine(ArrayToKLine(data, false), 0.5);
+  const kline = ArrayToKLine(data, false);
   const executor = new SpotSimpleTest();
-  const bot = new StochRSICross(executor, {
-    rsi_period: 13,
-    k_period: 32,
-    d_period: 45,
-    stoch_period: 45,
+  const bot = new Clams(executor, {
     stop_rate: 1,
     take_rate: 1e6,
   });
