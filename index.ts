@@ -26,9 +26,17 @@ function belong(kline: OHLCV[], pattern: [number, number][]) {
 }
 
 async function main() {
-  const kline = ArrayToKLine(data);
+  let kline = ArrayToKLine(data);
+  kline = kline.splice(kline.length - 3);
   console.log('你好，世界');
-  console.log(fk(kline.splice(kline.length - 10)));
+  const sample = extract(kline);
+  console.log(sample);
+  console.log(belong(kline, [
+    [3, 8],
+    [0, 10],
+    [7, 0],
+    [6, 5],
+  ]));
 }
 
 main();
