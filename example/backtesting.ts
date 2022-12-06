@@ -6,7 +6,7 @@ import { Clams } from '../clams';
 const data = require('../data/ETH_USDT-4h.json');
 
 function main() {
-  const kline = ArrayToKLine(data, false);
+  const kline = ArrayToKLine(data);
   const executor = new SpotSimpleTest();
   const bot = new Clams(executor, {
     stop_rate: 0.01,
