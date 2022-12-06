@@ -45,7 +45,7 @@ extends Bot<OHLCV, Signal> {
     const need_take = signal.close >= take_price;
     if (need_stop) {
       // console.log('止损卖', moment(signal.time).format('YYYY-MM-DD HH:mm'), signal.opened ? signal.close : stop_price);
-      console.log('');
+      // console.log('');
       this.executor.SellAll(signal.opened ? signal.close : stop_price);
     }
     else if (need_take) {
