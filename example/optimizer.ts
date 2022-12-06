@@ -2,7 +2,7 @@
 import { ArrayToKLine, Random, SpotSimpleTest } from 'litebot';
 import { MAKD, Params } from '../makd';
 
-const data = require('../data/BTC_USDT-30m.json');
+const data = require('../data/BTC_USDT-1h.json');
 
 function main() {
   const kline = ArrayToKLine(data, false);
