@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { ArrayToKLine, Random, SpotSimpleTest } from 'litebot';
-import { StochRSICross, Params } from '../stoch_rsi_cross';
+import { MAKD, Params } from '../makd';
 
 const data = require('../data/BTC_USDT-30m.json');
 
@@ -9,14 +9,14 @@ function main() {
   const random = new Random<Params>();
   random.Search({
     domain: {
-      rsi_period: [5, 13],
-      stoch_period: [35, 43],
-      k_period: [31, 39],
-      d_period: [40, 48],
+      fast_period: [2, 100],
+      slow_period: [2, 100],
+      k_period: [2, 100],
+      d_period: [2, 100],
     },
     target: (params) => {
       const executor = new SpotSimpleTest();
-      const bot = new StochRSICross(executor, params);
+      const bot = new MAKD(executor, params);
       bot.BackTestingBatch(kline);
       return executor.ROI(kline[kline.length - 1].close);
     },
