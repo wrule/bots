@@ -24,7 +24,7 @@ extends Bot<OHLCV, Signal> {
   }
 
   public get length() {
-    return 2;
+    return 3;
   }
 
   protected next(tcs: OHLCV[], queue: Signal[] = []): Signal[] {
@@ -32,8 +32,8 @@ extends Bot<OHLCV, Signal> {
     const closed = result.filter((item) => item.closed);
     closed.forEach((last, index) => {
       last.green = last.close >= last.open;
-      last.buy = closed[index - 1]?.green === false && last.green;
-      last.sell = closed[index - 1]?.green === true && !last.green;
+      last.buy = closed[index - 2]?.green === false && closed[index - 1]?.green === true && last.green;
+      last.sell = closed[index - 2]?.green === true && closed[index - 1]?.green === false && !last.green;
     });
     return result;
   }
