@@ -4,11 +4,13 @@ const data = require('./data/ETH_USDT-1d.json');
 
 function fk(kline: OHLCV[]) {
   const max = Math.max(...kline.map((item) => item.high));
-  const min = Math.min(...kline.map((item) => item.high));
+  const min = Math.min(...kline.map((item) => item.low));
+  const diff = max - min;
+  const level = (num: number) => Math.floor((num - min) / diff * 10);
   const points: [number, number][] = [];
   kline.forEach((item, index) => {
-    points.push([item.high, item.low]);
-    if (index === kline.length - 1) points.push([item.close, NaN]);
+    points.push([level(item.low), level(item.high)]);
+    if (index === kline.length - 1) points.push([level(item.close), NaN]);
   });
   console.log(points);
 }
