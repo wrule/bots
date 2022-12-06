@@ -11,6 +11,7 @@ interface Params {
 export
 interface Signal
 extends OHLCV {
+  nail: boolean;
   green: boolean;
   buy: boolean;
   sell: boolean;
@@ -32,7 +33,9 @@ extends Bot<OHLCV, Signal> {
     const closed = result.filter((item) => item.closed);
     closed.forEach((last, index) => {
       last.green = last.close >= last.open;
-      last.buy = closed[index - 2]?.green === false && closed[index - 1]?.green === true && last.green;
+      const nums = [last.open, last.high, last.low, last.close].sort((a, b) => b - a);
+      last.nail = (nums[2] - nums[3]) / (nums[0] - nums[2]) > 1.5;
+      last.buy = closed[index - 1]?.nail === false && last.nail;
       last.sell = closed[index - 2]?.green === true && closed[index - 1]?.green === false && !last.green;
     });
     return result;
