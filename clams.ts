@@ -44,12 +44,12 @@ extends Bot<OHLCV, Signal> {
     const need_stop = signal.close <= stop_price;
     const need_take = signal.close >= take_price;
     if (need_stop) {
-      console.log('止损卖', moment(signal.time).format('YYYY-MM-DD HH:mm'), signal.opened ? signal.close : stop_price);
+      // console.log('止损卖', moment(signal.time).format('YYYY-MM-DD HH:mm'), signal.opened ? signal.close : stop_price);
       console.log('');
       this.executor.SellAll(signal.opened ? signal.close : stop_price);
     }
     else if (need_take) {
-      console.log('止盈卖');
+      // console.log('止盈卖');
       this.executor.SellAll(signal.opened ? signal.close : take_price);
     }
     return need_stop || need_take;
@@ -59,12 +59,12 @@ extends Bot<OHLCV, Signal> {
     if (!signal.closed) this.queue.pop();
     if (this.stop(signal)) return;
     if (signal.sell) {
-      console.log('信号卖', moment(signal.time).format('YYYY-MM-DD HH:mm'), signal.close);
-      console.log('');
+      // console.log('信号卖', moment(signal.time).format('YYYY-MM-DD HH:mm'), signal.close);
+      // console.log('');
       this.executor.SellAll(signal.close);
     }
     else if (signal.buy) {
-      console.log('信号买', moment(signal.time).format('YYYY-MM-DD HH:mm'), signal.close);
+      // console.log('信号买', moment(signal.time).format('YYYY-MM-DD HH:mm'), signal.close);
       this.executor.BuyAll(signal.close);
     }
   }
