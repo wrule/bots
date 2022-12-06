@@ -49,6 +49,7 @@ extends Bot<OHLCV, Signal> {
       this.executor.SellAll(signal.opened ? signal.close : stop_price);
     }
     else if (need_take) {
+      console.log('止盈卖');
       this.executor.SellAll(signal.opened ? signal.close : take_price);
     }
     return need_stop || need_take;
