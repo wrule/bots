@@ -10,7 +10,7 @@ function main() {
   const executor = new SpotSimpleTest();
   const bot = new Clams(executor, {
     stop_rate: 0.01,
-    take_rate: 0.1,
+    take_rate: 0.05,
   });
   bot.BackTestingBatch(kline);
   console.log(executor.ROI(kline[kline.length - 1].close));
