@@ -39,19 +39,20 @@ extends Bot<TC, Signal> {
 
   protected next(tcs: TC[], queue: Signal[] = []) {
     const result = queue.concat(tcs as Signal[]);
-    const close = result.map((item) => item.close);
-    const slow_line = t.sma(close, this.params.slow_period);
-    const fast_line = t.sma(close, this.params.fast_period, slow_line.length);
+    const closed = result.filter((item) => item.closed);
+    const source = closed.map((item) => item.close);
+    const slow_line = t.sma(source, this.params.slow_period);
+    const fast_line = t.sma(source, this.params.fast_period, slow_line.length);
     const diff = fast_line.map((item, index) => item - slow_line[index]);
     const k = t.sma(diff, this.params.k_period);
     const d = t.sma(k, this.params.d_period);
-    t._align([k, d], close.length);
-    result.forEach((last, index) => {
+    t._align([k, d], closed.length);
+    closed.forEach((last, index) => {
       last.k = k[index];
       last.d = d[index];
       last.diff = k[index] - d[index];
-      last.buy = result[index - 1]?.diff <= 0 && last.diff > 0;
-      last.sell = result[index - 1]?.diff >= 0 && last.diff < 0;
+      last.buy = closed[index - 1]?.diff <= 0 && last.diff > 0;
+      last.sell = closed[index - 1]?.diff >= 0 && last.diff < 0;
     });
     return result;
   }
