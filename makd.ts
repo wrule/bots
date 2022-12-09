@@ -37,7 +37,7 @@ extends Bot<TC, Signal> {
       t.sma_start(this.params.d_period) + 2;
   }
 
-  protected next(tcs: TC[], queue: Signal[] = []) {
+  public next(tcs: TC[], queue: Signal[]) {
     const result = queue.concat(tcs as Signal[]);
     const closed = result.filter((item) => item.closed);
     const source = closed.map((item) => item.close);
@@ -67,7 +67,7 @@ extends Bot<TC, Signal> {
     return need_stop || need_take;
   }
 
-  protected exec(signal: Signal) {
+  public exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
     if (this.stop(signal)) return;
     if (signal.sell) this.executor.SellAll(signal.close);

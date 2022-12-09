@@ -31,7 +31,7 @@ extends Bot<TC, Signal> {
     return 1000;
   }
 
-  protected next(tcs: TC[], queue: Signal[] = []) {
+  public next(tcs: TC[], queue: Signal[]) {
     const result = queue.concat(tcs as Signal[]);
     const close = result.map((item) => item.close);
     const rsi_result = t.rsi(close, this.params.rsi_period);
@@ -48,7 +48,7 @@ extends Bot<TC, Signal> {
     return result;
   }
 
-  protected exec(signal: Signal) {
+  public exec(signal: Signal) {
     if (signal.sell) {
       this.executor.SellAll(signal.close);
     } else if (signal.buy) {

@@ -30,7 +30,7 @@ extends Bot<OHLCV, Signal> {
     return this.params.slow_period + 1;
   }
 
-  protected next(tcs: OHLCV[], queue: Signal[] = []): Signal[] {
+  public next(tcs: OHLCV[], queue: Signal[]): Signal[] {
     const result = queue.concat(tcs as Signal[]);
     const closed = result.filter((item) => item.closed);
     const source = closed.map((item) => item.close);
@@ -56,7 +56,7 @@ extends Bot<OHLCV, Signal> {
     return need_stop || need_take;
   }
 
-  protected exec(signal: Signal) {
+  public exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
     if (this.stop(signal)) return;
     if (signal.sell) this.executor.SellAll(signal.close);
