@@ -85,7 +85,7 @@ extends Bot<OHLCV, Signal> {
   const exchange = new ccxt.binance(secret.exchange);
   console.log('loading market...');
   await exchange.loadMarkets();
-  const executor = new SpotSimpleTest();
+  const executor = new SpotReal({ exchange, notifier, ...params });
   const bot = new SMACross(executor, params);
   (params.rt ? new KLineWatcherRT() : new KLineWatcher()).RunBot({ exchange, bot, ...params });
 })();
