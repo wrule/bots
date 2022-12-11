@@ -1,4 +1,5 @@
-import { Bot, SpotFull, TC, t } from "litebot";
+import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcherRT } from 'litebot';
+import { MAKD } from './makd';
 
 export
 interface Params {
@@ -56,3 +57,30 @@ extends Bot<TC, Signal> {
     }
   }
 }
+
+(async () => {
+  if (require.main !== module) return;
+  const secret = require('./.secret.json');
+  const params = {
+    name: '跟风狗',
+    symbol: 'ETH/USDT',
+    timeframe: '1m',
+    fast_period: 33,
+    slow_period: 80,
+    k_period: 72,
+    d_period: 3,
+    stop_rate: 1,
+    take_rate: 1e6,
+    interval: 500,
+    funds: 15,
+    assets: 0,
+  };
+  FillParams(params);
+  const notifier = new DingTalk(secret.notifier);
+  const exchange = new ccxt.binance(secret.exchange);
+  console.log('loading market...');
+  await exchange.loadMarkets();
+  const executor = new SpotReal({ exchange, notifier, ...params });
+  const bot = new MAKD(executor, params);
+  new KLineWatcherRT().RunBot({ exchange, bot, ...params });
+})();
