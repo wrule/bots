@@ -2,10 +2,11 @@
 import { ccxt } from 'litebot';
 
 async function main() {
-  const secret = require('./.secret.json');
-  const exchange = new ccxt.binance(secret.exchange);
-  const ticker = await exchange.fetchTicker('ETH/USDT');
-  console.log([ticker.bid, ticker.ask]);
+  const exchange = new ccxt.binance();
+  const tickers = await exchange.fetchTickers(['BTC/USDT', 'ETH/USDT']);
+  Object.values(tickers).forEach((item) => {
+    console.log(item.symbol, [item.bid, item.ask]);
+  });
 }
 
 main();
