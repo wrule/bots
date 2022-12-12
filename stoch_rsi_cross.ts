@@ -93,6 +93,7 @@ extends Bot<TC, Signal> {
     last_action: '',
     init_valuation: NaN,
     rt: false,
+    countdown: 8 * 1e3,
     interval: 1000,
   };
   FillParams(params);
@@ -102,5 +103,5 @@ extends Bot<TC, Signal> {
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
   const bot = new StochRSICross(executor, params);
-  (params.rt ? new KLineWatcherRT() : new KLineWatcher()).RunBot({ exchange, bot, ...params });
+  (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
 })();
