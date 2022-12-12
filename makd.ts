@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcher, SpotSimpleTest, OHLCV } from 'litebot';
+import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcher, OHLCV, KLineWatcherRT } from 'litebot';
 
 export
 interface Params {
@@ -103,5 +103,5 @@ extends Bot<TC, Signal> {
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
   const bot = new MAKD(executor, params);
-  new KLineWatcher().RunBot({ exchange, bot, ...params });
+  (params.rt ? new KLineWatcherRT() : new KLineWatcher()).RunBot({ exchange, bot, ...params });
 })();
