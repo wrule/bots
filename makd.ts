@@ -88,9 +88,13 @@ extends Bot<TC, Signal> {
     d_period: 3,
     stop_rate: 1,
     take_rate: 1e6,
-    interval: 500,
     funds: 15,
     assets: 0,
+    final_price: NaN,
+    last_action: '',
+    init_valuation: NaN,
+    rt: true,
+    interval: 500,
   };
   FillParams(params);
   const notifier = new DingTalk(secret.notifier);
