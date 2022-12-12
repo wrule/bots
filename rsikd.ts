@@ -1,15 +1,17 @@
-import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcherRT } from 'litebot';
+import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcherRT, OHLCV, KLineWatcher } from 'litebot';
 
 export
 interface Params {
   rsi_period: number;
   k_period: number;
   d_period: number;
+  stop_rate: number,
+  take_rate: number,
 }
 
 export
 interface Signal
-extends TC {
+extends OHLCV {
   k: number;
   d: number;
   diff: number;
@@ -33,27 +35,37 @@ extends Bot<TC, Signal> {
 
   public next(tcs: TC[], queue: Signal[]) {
     const result = queue.concat(tcs as Signal[]);
-    const close = result.map((item) => item.close);
-    const rsi_result = t.rsi(close, this.params.rsi_period);
+    const closed = result.filter((item) => item.closed);
+    const source = closed.map((item) => item.close);
+    const rsi_result = t.rsi(source, this.params.rsi_period);
     const k = t.sma(rsi_result, this.params.k_period);
     const d = t.sma(k, this.params.d_period);
-    t._align([k, d], close.length);
-    result.forEach((last, index) => {
+    t._align([k, d], closed.length);
+    closed.forEach((last, index) => {
       last.k = k[index];
       last.d = d[index];
       last.diff = k[index] - d[index];
-      last.buy = result[index - 1]?.diff <= 0 && last.diff > 0;
-      last.sell = result[index - 1]?.diff >= 0 && last.diff < 0;
+      last.buy = closed[index - 1]?.diff <= 0 && last.diff > 0;
+      last.sell = closed[index - 1]?.diff >= 0 && last.diff < 0;
     });
     return result;
   }
 
+  private stop(signal: Signal) {
+    const stop_price = this.executor.Offset(-this.params.stop_rate);
+    const take_price = this.executor.Offset(this.params.take_rate);
+    const need_stop = signal.close <= stop_price;
+    const need_take = signal.close >= take_price;
+    if (need_stop) this.executor.SellAll(signal.opened ? signal.close : stop_price);
+    else if (need_take) this.executor.SellAll(signal.opened ? signal.close : take_price);
+    return need_stop || need_take;
+  }
+
   public exec(signal: Signal) {
-    if (signal.sell) {
-      this.executor.SellAll(signal.close);
-    } else if (signal.buy) {
-      this.executor.BuyAll(signal.close);
-    }
+    if (!signal.closed) this.queue.pop();
+    if (this.stop(signal)) return;
+    if (signal.sell) this.executor.SellAll(signal.close);
+    else if (signal.buy) this.executor.BuyAll(signal.close);
   }
 }
 
@@ -74,6 +86,7 @@ extends Bot<TC, Signal> {
     final_price: NaN,
     last_action: '',
     init_valuation: NaN,
+    rt: true,
     interval: 500,
   };
   FillParams(params);
@@ -83,5 +96,5 @@ extends Bot<TC, Signal> {
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
   const bot = new RSIKD(executor, params);
-  new KLineWatcherRT().RunBot({ exchange, bot, ...params });
+  (params.rt ? new KLineWatcherRT() : new KLineWatcher()).RunBot({ exchange, bot, ...params });
 })();
