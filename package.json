@@ -11,7 +11,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "litebot": "^0.2.9",
+    "litebot": "^0.2.10",
     "moment": "^2.29.4"
   }
 }
