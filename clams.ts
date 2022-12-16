@@ -10,6 +10,7 @@ interface Params {
 export
 interface Signal
 extends OHLCV {
+  green: boolean;
   buy: boolean;
   sell: boolean;
 }
@@ -28,9 +29,17 @@ extends Bot<TC, Signal> {
   public next(tcs: TC[], queue: Signal[]) {
     const result = queue.concat(tcs as Signal[]);
     const closed = result.filter((item) => item.closed);
-    const source = closed.map((item) => item.close);
     closed.forEach((last, index) => {
-
+      last.green = last.close > last.open;
+      last.buy = (
+        // closed[index - 6]?.green === false &&
+        // closed[index - 5]?.green === false &&
+        // closed[index - 4]?.green === false &&
+        // closed[index - 3]?.green === false &&
+        // closed[index - 2]?.green === false &&
+        closed[index - 1]?.green === false &&
+        last.green === true
+      );
     });
     return result;
   }
