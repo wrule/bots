@@ -93,7 +93,8 @@ extends Bot<TC, Signal> {
     final_price: NaN,
     last_action: '',
     init_valuation: NaN,
-    rt: true,
+    rt: false,
+    countdown: 8 * 1e3,
     interval: 500,
   };
   FillParams(params);
@@ -103,5 +104,5 @@ extends Bot<TC, Signal> {
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
   const bot = new MAKD(executor, params);
-  (params.rt ? new KLineWatcherRT() : new KLineWatcher()).RunBot({ exchange, bot, ...params });
+  (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
 })();
