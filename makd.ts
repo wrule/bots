@@ -88,7 +88,7 @@ extends Bot<TC, Signal> {
     d_period: 3,
     stop_rate: 1,
     take_rate: 1e6,
-    funds: 15,
+    funds: 11,
     assets: 0,
     final_price: NaN,
     last_action: '',
