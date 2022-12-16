@@ -71,16 +71,17 @@ extends Bot<OHLCV, Signal> {
     name: '墙头草',
     symbol: 'ETH/USDT',
     timeframe: '1m',
-    fast_period: 9,
-    slow_period: 44,
-    stop_rate: 0.004,
-    take_rate: 0.008,
-    funds: 15,
+    fast_period: 2,
+    slow_period: 3,
+    stop_rate: 1,
+    take_rate: 1e6,
+    funds: 11,
     assets: 0,
     final_price: NaN,
     last_action: '',
     init_valuation: NaN,
     rt: true,
+    countdown: 8 * 1e3,
     interval: 1000,
   };
   FillParams(params);
@@ -90,5 +91,5 @@ extends Bot<OHLCV, Signal> {
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
   const bot = new SMACross(executor, params);
-  (params.rt ? new KLineWatcherRT() : new KLineWatcher()).RunBot({ exchange, bot, ...params });
+  (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
 })();
