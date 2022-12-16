@@ -3,10 +3,6 @@ import { Bot, DingTalk, FillParams, KLineWatcher, KLineWatcherRT, SpotFull, Spot
 
 export
 interface Params {
-  rsi_period: number;
-  stoch_period: number;
-  k_period: number;
-  d_period: number;
   stop_rate: number;
   take_rate: number;
 }
@@ -14,44 +10,27 @@ interface Params {
 export
 interface Signal
 extends OHLCV {
-  k: number;
-  d: number;
-  diff: number;
   buy: boolean;
   sell: boolean;
 }
 
 export
-class StochRSICross
+class Clams
 extends Bot<TC, Signal> {
   public constructor(private readonly executor: SpotFull, private readonly params: Params) {
     super();
   }
 
   public get length() {
-    return (t.rsi_start(this.params.rsi_period) + t.stoch_start({
-      k_slowing_period: this.params.k_period,
-      k_period: this.params.stoch_period,
-      d_period: this.params.d_period,
-    }) + 2) * 4;
+    return 1000;
   }
 
   public next(tcs: TC[], queue: Signal[]) {
     const result = queue.concat(tcs as Signal[]);
     const closed = result.filter((item) => item.closed);
     const source = closed.map((item) => item.close);
-    const rsi_result = t.rsi(source, this.params.rsi_period);
-    const { stoch_k, stoch_d } = t.stoch(rsi_result, rsi_result, rsi_result, {
-      k_slowing_period: this.params.k_period,
-      k_period: this.params.stoch_period,
-      d_period: this.params.d_period,
-    }, closed.length);
     closed.forEach((last, index) => {
-      last.k = stoch_k[index];
-      last.d = stoch_d[index];
-      last.diff = stoch_k[index] - stoch_d[index];
-      last.buy = closed[index - 1]?.diff <= 0 && last.diff > 0;
-      last.sell = closed[index - 1]?.diff >= 0 && last.diff < 0;
+
     });
     return result;
   }
@@ -102,6 +81,6 @@ extends Bot<TC, Signal> {
   console.log('loading market...');
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
-  const bot = new StochRSICross(executor, params);
+  const bot = new Clams(executor, params);
   (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
 })();
