@@ -22,10 +22,7 @@ extends OHLCV {
 export
 class RSIKD
 extends Bot<TC, Signal> {
-  public constructor(
-    private readonly executor: SpotFull,
-    private readonly params: Params,
-  ) {
+  public constructor(private readonly executor: SpotFull, private readonly params: Params) {
     super();
   }
 
