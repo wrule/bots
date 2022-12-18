@@ -81,13 +81,14 @@ extends Bot<TC, Signal> {
     d_period: 4,
     stop_rate: 1,
     take_rate: 1e6,
-    funds: 15,
+    funds: 11,
     assets: 0,
     final_price: NaN,
     last_action: '',
     init_valuation: NaN,
-    rt: true,
-    interval: 500,
+    rt: false,
+    countdown: 8 * 1e3,
+    interval: 1000,
   };
   FillParams(params);
   const notifier = new DingTalk(secret.notifier);
@@ -96,5 +97,5 @@ extends Bot<TC, Signal> {
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
   const bot = new RSIKD(executor, params);
-  (params.rt ? new KLineWatcherRT() : new KLineWatcher()).RunBot({ exchange, bot, ...params });
+  (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
 })();
