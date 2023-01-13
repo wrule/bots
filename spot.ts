@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from 'fs';
 import { ccxt } from 'litebot';
 import HttpsProxyAgent from 'https-proxy-agent';
 
@@ -12,6 +13,14 @@ async function main() {
   Object.entries(balance).forEach(([key, value]) => {
     if (value > 0) console.log(key, value);
   });
+  console.log(1);
+  const order = await exchange.createMarketOrder(
+    'NFT/USDT',
+    'sell',
+    5049240.176924,
+  );
+  console.log(2);
+  fs.writeFileSync('output.json', JSON.stringify(order, null, 2));
 }
 
 main();
