@@ -17,14 +17,13 @@ async function main() {
     agent: HttpsProxyAgent('http://127.0.0.1:7890'),
   });
   await list(exchange);
-  return;
   console.log('开始交易');
   const order = await exchange.createMarketOrder(
     'ETH/USDT',
     'buy',
-    0,
+    2,
     undefined,
-    { quoteOrderQty: 11 },
+    { tgtCcy: 'quote_ccy' },
   );
   console.log('结束交易，写入结果...');
   fs.writeFileSync('output.json', JSON.stringify(order, null, 2));
