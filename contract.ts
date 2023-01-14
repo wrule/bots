@@ -48,22 +48,30 @@ async function main() {
   const secret = require('./.secret.json');
   const exchange = new ccxt.binance({
     ...secret.exchange,
+    options: { defaultType: 'future', hedgeMode: true },
     agent: HttpsProxyAgent('http://127.0.0.1:7890'),
   });
-  await list(exchange);
   console.log('开始交易');
-  const order = await exchange.createMarketOrder(
-    'ETH/USDT',
-    'buy',
-    0,
-    undefined,
+  // const order = { };
+  const order = await exchange.createMarketBuyOrder(
+    'BTC/USDT',
+    0.001,
     {
-      quoteOrderQty: 11,
+      positionSide: 'SHORT',
+      // quoteOrderQty: 40,
     },
   );
+  // const order = await exchange.createMarketOrder(
+  //   'ETH/USDT',
+  //   'buy',
+  //   0,
+  //   undefined,
+  //   {
+  //     quoteOrderQty: 11,
+  //   },
+  // );
   console.log('结束交易，写入结果...');
   fs.writeFileSync('output.json', JSON.stringify(order, null, 2));
-  await list(exchange);
 }
 
 main();
