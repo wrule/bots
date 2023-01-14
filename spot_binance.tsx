@@ -20,8 +20,8 @@ async function main() {
   console.log('开始交易');
   const order = await exchange.createMarketBuyOrder(
     'ETH/USDT',
-    exchange.costToPrecision('ETH/USDT', 2),
-    { quoteOrderQty: exchange.costToPrecision('ETH/USDT', 2) },
+    exchange.costToPrecision('ETH/USDT', 11),
+    { quoteOrderQty: exchange.costToPrecision('ETH/USDT', 11) },
   );
   // const order = await exchange.createMarketSellOrder(
   //   'ETH/USDT',
