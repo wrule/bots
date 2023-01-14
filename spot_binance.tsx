@@ -11,22 +11,23 @@ async function list(exchange: ccxt.Exchange) {
 }
 
 async function main() {
-  const secret = require('./.secret.json');
+  const secret = require('./.secret.okx.json');
   const exchange = new ccxt.binance({
     ...secret.exchange,
     agent: HttpsProxyAgent('http://127.0.0.1:7890'),
   });
   await list(exchange);
   console.log('开始交易');
-  const order = await exchange.createMarketOrder(
+  const order = await exchange.createMarketBuyOrder(
     'ETH/USDT',
-    'buy',
-    0,
-    undefined,
-    {
-      quoteOrderQty: 11,
-    },
+    exchange.costToPrecision('ETH/USDT', 2),
+    { tgtCcy: 'quote_ccy' },
   );
+  // const order = await exchange.createMarketSellOrder(
+  //   'ETH/USDT',
+  //   exchange.amountToPrecision('ETH/USDT', 0.00257364),
+  //   { },
+  // );
   console.log('结束交易，写入结果...');
   fs.writeFileSync('output.json', JSON.stringify(order, null, 2));
   await list(exchange);
