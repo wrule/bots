@@ -18,7 +18,7 @@ async function main() {
   });
   await list(exchange);
   console.log('开始交易');
-  const order = await exchange.fetchOrder('534512812757221377', 'ETH/USDT');
+  // const order = await exchange.fetchOrder('534512812757221377', 'ETH/USDT');
   // const order = await exchange.createMarketBuyOrder(
   //   'ETH/USDT',
   //   exchange.costToPrecision('ETH/USDT', 11),
@@ -29,10 +29,10 @@ async function main() {
   //       'quote_ccy' : undefined,
   //   } as any,
   // );
-  // const order = await exchange.createMarketSellOrder(
-  //   'ETH/USDT',
-  //   exchange.amountToPrecision('ETH/USDT', 0.0039915),
-  // );
+  const order = await exchange.createMarketSellOrder(
+    'ETH/USDT',
+    exchange.amountToPrecision('ETH/USDT', 0.003224264),
+  );
   console.log('结束交易，写入结果...');
   fs.writeFileSync('output.okx.query.json', JSON.stringify(order, null, 2));
   await list(exchange);
