@@ -33,7 +33,7 @@ async function main() {
   //   exchange.amountToPrecision('ETH/USDT', 0.0039915),
   // );
   console.log('结束交易，写入结果...');
-  fs.writeFileSync('output.okex.json', JSON.stringify(order, null, 2));
+  fs.writeFileSync('output.okx.json', JSON.stringify(order, null, 2));
   await list(exchange);
 }
 
