@@ -106,4 +106,4 @@ dist
 *.js
 data
 .secret*.json
-output.json
+output*.json
