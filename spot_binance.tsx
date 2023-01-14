@@ -21,7 +21,7 @@ async function main() {
   const order = await exchange.createMarketBuyOrder(
     'ETH/USDT',
     exchange.costToPrecision('ETH/USDT', 2),
-    { tgtCcy: 'quote_ccy' },
+    { quoteOrderQty: exchange.costToPrecision('ETH/USDT', 2) },
   );
   // const order = await exchange.createMarketSellOrder(
   //   'ETH/USDT',
