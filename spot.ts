@@ -20,13 +20,17 @@ async function main() {
   console.log('开始交易');
   // const order = await exchange.createMarketBuyOrder(
   //   'ETH/USDT',
-  //   exchange.costToPrecision('ETH/USDT', 2),
-  //   { tgtCcy: 'quote_ccy' },
+  //   exchange.costToPrecision('ETH/USDT', 11),
+  //   {
+  //     quoteOrderQty: exchange.id === 'binance' ?
+  //       exchange.costToPrecision('ETH/USDT', 11) : undefined,
+  //     tgtCcy: exchange.id === 'okx' ?
+  //       'quote_ccy' : undefined,
+  //   } as any,
   // );
   const order = await exchange.createMarketSellOrder(
     'ETH/USDT',
-    exchange.amountToPrecision('ETH/USDT', 0.00257364),
-    { },
+    exchange.amountToPrecision('ETH/USDT', 0.01405063),
   );
   console.log('结束交易，写入结果...');
   fs.writeFileSync('output.json', JSON.stringify(order, null, 2));
