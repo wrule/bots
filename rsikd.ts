@@ -1,4 +1,4 @@
-import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcherRT, OHLCV, KLineWatcher } from 'litebot';
+import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcherRT, OHLCV, KLineWatcher, ExFactory } from 'litebot';
 
 export
 interface Params {
@@ -89,7 +89,7 @@ extends Bot<TC, Signal> {
   };
   FillParams(params);
   const notifier = new DingTalk(secret.notifier);
-  const exchange = new ccxt.binance(secret.exchange);
+  const exchange = ExFactory(secret.exchange);
   console.log('loading market...');
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
