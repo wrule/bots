@@ -11,7 +11,7 @@ async function list(exchange: ccxt.Exchange) {
 }
 
 async function main() {
-  const secret = require('./.secret.okx.json');
+  const secret = require('./.secret.json');
   const exchange = new ccxt.binance({
     ...secret.exchange,
     agent: HttpsProxyAgent('http://127.0.0.1:7890'),
