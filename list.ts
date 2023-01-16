@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-import { ccxt, ExFactory } from 'litebot';
+import { ExFactory } from 'litebot';
 
-async function main() {
+export
+async function list() {
   const secret = require('./.secret.json');
   const exchange = ExFactory(secret.exchange);
   const balance = await exchange.fetchFreeBalance();
@@ -10,4 +11,7 @@ async function main() {
   });
 }
 
-main();
+(() => {
+  if (require.main !== module) return;
+  list();
+})();
