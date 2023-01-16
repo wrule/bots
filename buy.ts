@@ -16,6 +16,14 @@ async function main() {
   symbol = (symbol.includes('/') ? symbol : `${symbol}/USDT`).toUpperCase();
   amount_str = amount_str.toUpperCase();
   console.log(symbol, amount_str);
+  let amount = amount_str.trim() ? Number(amount_str) : NaN;
+  if (amount_str === 'ALL') {
+    const balances = await exchange.fetchBalance();
+    balances[''].
+  } else {
+
+  }
+  if (isNaN(amount)) throw 'amount illegal';
 }
 
 main();
