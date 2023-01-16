@@ -9,5 +9,6 @@ function message(text: string) {
 
 (() => {
   if (require.main !== module) return;
-  message('你好，世界');
+  const text = process.argv[2] || 'Hi, Fuck you';
+  message(text);
 })();
