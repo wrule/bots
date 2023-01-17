@@ -30,7 +30,7 @@ async function main() {
   console.log(amount, source, '-->', target);
   await exchange.loadMarkets();
   await list();
-  console.log('start trading...');
+  console.log('start buy trading...');
   const order = await exchange.createMarketBuyOrder(
     symbol,
     exchange.costToPrecision(symbol, amount),
@@ -41,7 +41,7 @@ async function main() {
         'quote_ccy' : undefined,
     } as any,
   );
-  console.log('trading finish');
+  console.log('buy trading finish');
   await list();
   console.log(
     order.cost, source,
