@@ -45,6 +45,7 @@ async function main() {
     order.cost, source,
     '[-', order.price ,'->]',
     order.amount, target,
+    order.fee,
   );
 }
 
