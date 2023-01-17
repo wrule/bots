@@ -26,6 +26,7 @@ async function main() {
   }
   console.log(symbol, amount, target, source);
   if (isNaN(amount)) throw 'amount illegal';
+  await exchange.loadMarkets();
   await list();
   console.log('start trading...');
   const order = await exchange.createMarketBuyOrder(
