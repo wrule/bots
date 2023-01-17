@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { ExFactory } from 'litebot';
 import HttpsProxyAgent from 'https-proxy-agent';
+import { list } from './list';
 
 async function main() {
   const secret = require('./.secret.json');
@@ -25,8 +26,8 @@ async function main() {
   }
   console.log(symbol, amount, target, source);
   if (isNaN(amount)) throw 'amount illegal';
-
-
+  await list();
+  console.log('start trading...');
   const order = await exchange.createMarketBuyOrder(
     symbol,
     exchange.costToPrecision(symbol, amount),
@@ -37,6 +38,8 @@ async function main() {
         'quote_ccy' : undefined,
     } as any,
   );
+  console.log('trading finish');
+  await list();
 }
 
 main();
