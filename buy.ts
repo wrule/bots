@@ -41,6 +41,11 @@ async function main() {
   );
   console.log('trading finish');
   await list();
+  console.log(
+    order.cost, source,
+    '[-', order.price ,'->]',
+    order.amount, target,
+  );
 }
 
 main();
