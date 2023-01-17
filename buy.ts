@@ -27,7 +27,7 @@ async function main() {
   }
   if (isNaN(amount)) throw 'amount illegal';
 
-  console.log(amount, source, '[-->]', target);
+  console.log(amount, source, '-->', target);
   await exchange.loadMarkets();
   await list();
   console.log('start trading...');
@@ -45,7 +45,7 @@ async function main() {
   await list();
   console.log(
     order.cost, source,
-    '[-', order.price ,'->]',
+    order.price, '-->',
     order.amount, target,
     order.fee,
   );
