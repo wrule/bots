@@ -16,8 +16,8 @@ async function main() {
   if (symbol == null) throw 'missing symbol';
   if (amount_str == null) throw 'missing amount';
   symbol = (symbol.includes('/') ? symbol : `${symbol}/USDT`).toUpperCase();
-  const target = symbol.split('/')[0];
-  const source = symbol.split('/')[1];
+  const source = symbol.split('/')[0];
+  const target = symbol.split('/')[1];
   amount_str = amount_str.toUpperCase();
 
   let amount = amount_str.trim() ? Number(amount_str) : NaN;
@@ -30,18 +30,12 @@ async function main() {
   console.log(amount, source, '[-->]', target);
   await exchange.loadMarkets();
   await list();
-  console.log('start trading...');
-  const order = await exchange.createMarketBuyOrder(
+  console.log('start sell trading...');
+  const order = await exchange.createMarketSellOrder(
     symbol,
-    exchange.costToPrecision(symbol, amount),
-    {
-      quoteOrderQty: exchange.id === 'binance' ?
-        exchange.costToPrecision(symbol, amount) : undefined,
-      tgtCcy: exchange.id === 'okx' ?
-        'quote_ccy' : undefined,
-    } as any,
+    exchange.amountToPrecision(symbol, amount),
   );
-  console.log('trading finish');
+  console.log('sell trading finish');
   await list();
   console.log(
     order.cost, source,
