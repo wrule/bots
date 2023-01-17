@@ -19,13 +19,15 @@ async function main() {
   const target = symbol.split('/')[0];
   const source = symbol.split('/')[1];
   amount_str = amount_str.toUpperCase();
+
   let amount = amount_str.trim() ? Number(amount_str) : NaN;
   if (amount_str === 'ALL') {
     const balances = await exchange.fetchBalance();
     amount = balances[source].free;
   }
-  console.log(symbol, amount, target, source);
   if (isNaN(amount)) throw 'amount illegal';
+
+  console.log(amount, source, '[-->]', target);
   await exchange.loadMarkets();
   await list();
   console.log('start trading...');
