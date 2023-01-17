@@ -38,9 +38,9 @@ async function main() {
   console.log('sell trading finish');
   await list();
   console.log(
-    order.cost, source,
+    order.amount, source,
     '[-', order.price ,'->]',
-    order.amount, target,
+    order.cost, target,
     order.fee,
   );
 }
