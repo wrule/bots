@@ -4,7 +4,7 @@ import HttpsProxyAgent from 'https-proxy-agent';
 import { list } from './list';
 
 async function main() {
-  const secret = require('./.secret.json');
+  const secret = require('../.secret.json');
   const exchange = ExFactory({
     ...secret.exchange,
     agent: secret.exchange.https_proxy_agent ?

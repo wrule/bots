@@ -3,7 +3,7 @@ import { DingTalk } from 'litebot';
 
 export
 function message(text: string) {
-  const secret = require('./.secret.json');
+  const secret = require('../.secret.json');
   new DingTalk(secret.notifier).SendMessage(text);
 }
 
