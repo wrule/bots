@@ -104,6 +104,7 @@ dist
 .tern-port
 
 *.js
+*.zip
 data
 .secret*.json
 output*.json
