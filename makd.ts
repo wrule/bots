@@ -71,15 +71,15 @@ extends Bot<TC, Signal> {
     if (signal.sell) this.executor.SellAll(signal.close);
     else if (signal.buy) this.executor.BuyAll(signal.close);
 
-    if (signal.closed) {
-      const info = {
-        time: moment(signal.time).format('YYYY-MM-DD HH:mm:ss'),
-        price: signal.close,
-        valuation: this.executor.Valuation(signal.close),
-        roi: this.executor.ROI(signal.close),
-      };
-      console.log(JSON.stringify(info, null, 2) + ',');
-    }
+    // if (signal.closed) {
+      // const info = {
+        // time: moment(signal.time).format('YYYY-MM-DD HH:mm:ss'),
+        // price: signal.close,
+        // valuation: this.executor.Valuation(signal.close),
+        // roi: this.executor.ROI(signal.close),
+      // };
+      // console.log(JSON.stringify(info, null, 2) + ',');
+    // }
   }
 }
 
