@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node index.js",
-    "build": "tsc && chmod +x *.js",
+    "build": "tsc",
     "watch": "tsc --watch"
   },
   "repository": "https://github.com/wrule/bots.git",
