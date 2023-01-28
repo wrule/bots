@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 import { ArrayToKLine, ExpandKLine, SpotSimpleTest } from 'litebot';
-import { MAKD } from '../makd';
+import { SMACross } from '../sma_cross';
 
 const data = require('../data/BTC_USDT-1h.json');
 
 function main() {
   const kline = ExpandKLine(ArrayToKLine(data, false), 0.5);
-  const executor = new SpotSimpleTest(100, -0.001);
-  const bot = new MAKD(executor, {
+  const executor = new SpotSimpleTest();
+  const bot = new SMACross(executor, {
     fast_period: 15,
     slow_period: 29,
-    k_period: 4,
-    d_period: 7,
     stop_rate: 1,
     take_rate: 1e6,
   });
