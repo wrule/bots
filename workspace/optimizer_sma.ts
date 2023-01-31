@@ -9,8 +9,8 @@ function main() {
   const random = new Random<Params>();
   random.Search({
     domain: {
-      fast_period: [9, 9],
-      slow_period: [44, 44],
+      fast_period: [2, 200],
+      slow_period: [2, 200],
     },
     target: (params) => {
       const executor = new SpotSimpleTest();
