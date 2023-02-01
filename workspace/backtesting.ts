@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import { ArrayToKLine, ExpandKLine, SpotSimpleTest, TC } from 'litebot';
 import moment from 'moment';
-import { SMACross } from '../sma_cross';
+import { StochRSICross } from '../stoch_rsi_cross';
 
-const data = require('../data/ETH_USDT-2h.json');
+const data = require('../data/ETH_USDT-30m.json');
 
 export
 function Slice<T extends TC>(tcs: T[], start?: any, end?: any) {
@@ -15,9 +15,11 @@ function Slice<T extends TC>(tcs: T[], start?: any, end?: any) {
 function main() {
   const kline = Slice(ExpandKLine(ArrayToKLine(data, false), 0.5), '2009', '2026');
   const executor = new SpotSimpleTest(100, 0.001);
-  const bot = new SMACross(executor, {
-    fast_period: 9,
-    slow_period: 44,
+  const bot = new StochRSICross(executor, {
+    rsi_period: 13,
+    stoch_period: 45,
+    k_period: 32,
+    d_period: 45,
     stop_rate: 1,
     take_rate: 1e6,
   });
