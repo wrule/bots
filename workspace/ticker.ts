@@ -15,7 +15,7 @@ async function main() {
     .map((item) => item.includes('/') ? item : `${item}/USDT`)
     .map((item) => item.toUpperCase());
   const tickers = await exchange.fetchTickers(symbols);
-  Object.values(tickers).forEach((item) => {
+  Object.values(tickers).forEach((item: any) => {
     console.log(item.symbol, [item.bid, item.ask]);
   });
 }
