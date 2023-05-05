@@ -12,7 +12,7 @@
   "private": false,
   "dependencies": {
     "https-proxy-agent": "^5.0.1",
-    "litebot": "^0.2.19",
+    "litebot": "^0.2.20",
     "moment": "^2.29.4"
   }
 }
