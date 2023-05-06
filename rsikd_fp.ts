@@ -1,4 +1,4 @@
-import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcherRT, OHLCV, KLineWatcher, ExFactory } from 'litebot';
+import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotRealFeePool, KLineWatcherRT, OHLCV, KLineWatcher, ExFactory } from 'litebot';
 
 export
 interface Params {
@@ -80,6 +80,8 @@ extends Bot<TC, Signal> {
     take_rate: 1e6,
     funds: 11,
     assets: 0,
+    fee: 0.00075,
+    fee_pool: 0,
     final_price: NaN,
     last_action: '',
     init_valuation: NaN,
@@ -92,7 +94,7 @@ extends Bot<TC, Signal> {
   const exchange = ExFactory(secret.exchange);
   console.log('loading market...');
   await exchange.loadMarkets();
-  const executor = new SpotReal({ exchange, notifier, ...params });
+  const executor = new SpotRealFeePool({ exchange, notifier, ...params });
   const bot = new RSIKD(executor, params);
   (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
 })();
