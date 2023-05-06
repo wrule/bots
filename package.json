@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node index.js",
     "build": "tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "chmod": "chmod +x *.js && chmod +x workspace/*.js"
   },
   "repository": "https://github.com/wrule/bots.git",
   "license": "MIT",
