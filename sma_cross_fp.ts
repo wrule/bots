@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Bot, DingTalk, SpotFull, SpotReal, ccxt, t, FillParams, OHLCV, KLineWatcherRT, SpotSimpleTest, KLineWatcher, ExFactory } from 'litebot';
+import { Bot, DingTalk, SpotFull, SpotRealFeePool, ccxt, t, FillParams, OHLCV, KLineWatcherRT, SpotSimpleTest, KLineWatcher, ExFactory } from 'litebot';
 
 export
 interface Params {
@@ -77,6 +77,8 @@ extends Bot<OHLCV, Signal> {
     take_rate: 1e6,
     funds: 11,
     assets: 0,
+    fee: 0.00075,
+    fee_pool: 0,
     final_price: NaN,
     last_action: '',
     init_valuation: NaN,
@@ -89,7 +91,7 @@ extends Bot<OHLCV, Signal> {
   const exchange = ExFactory(secret.exchange);
   console.log('loading market...');
   await exchange.loadMarkets();
-  const executor = new SpotReal({ exchange, notifier, ...params });
+  const executor = new SpotRealFeePool({ exchange, notifier, ...params });
   const bot = new SMACross(executor, params);
   (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
 })();
