@@ -1,8 +1,12 @@
 #!/usr/bin/env node
-import { ExFactory, FillParams } from 'litebot';
+import { DingTalk, ExFactory, FillParams } from 'litebot';
 
 const secret = require('./.secret.json');
 const exchange = ExFactory({ ...secret.exchange });
+
+function message(data: any) {
+  new DingTalk(secret.notifier).SendMessage(JSON.stringify(data, null, 2));
+}
 
 async function check(params: any) {
   try {
