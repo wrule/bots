@@ -9,9 +9,9 @@ async function check(params: any) {
     const balance = await exchange.fetchFreeBalance();
     console.log(
       params.asset, 'position', balance[params.asset],
-      balance[params.asset] < params.baseline_dst ? '<' : '>=',
-      'baseline', params.baseline_dst,
-      balance[params.asset] < params.baseline_dst ? 'need to buy' : 'no need to buy',
+      balance[params.asset] < params.baseline_asset ? '<' : '>=',
+      'baseline', params.baseline_asset,
+      balance[params.asset] < params.baseline_asset ? 'need to buy' : 'no need to buy',
     );
   } catch (e) {
     console.log(e);
@@ -35,11 +35,11 @@ async function main() {
   params.asset = asset;
   params.fund = fund;
   const ticker = await exchange.fetchTicker(params.symbol);
-  params.baseline_dst = params.baseline / ticker.ask;
-  params.amount_dst = params.amount / ticker.ask;
+  params.baseline_asset = params.baseline / ticker.ask;
+  params.amount_asset = params.amount / ticker.ask;
   console.log(asset, 'current price: ', ticker.ask, fund);
-  console.log('current price baseline', params.baseline_dst, asset);
-  console.log('current price amount', params.amount_dst, asset);
+  console.log('current price baseline', params.baseline_asset, asset);
+  console.log('current price amount', params.amount_asset, asset);
   console.log(params);
   check(params);
 }
