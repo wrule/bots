@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import moment from 'moment';
 import { DingTalk, ExFactory, FillParams } from 'litebot';
 
 const secret = require('./.secret.json');
@@ -12,7 +13,9 @@ async function check(params: any) {
   try {
     const balance = await exchange.fetchFreeBalance();
     const need_to_buy = balance[params.asset] < params.baseline_asset;
+    const time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
     console.log(
+      time,
       params.asset, 'position', balance[params.asset],
       need_to_buy ? '<' : '>=',
       'baseline', params.baseline_asset,
@@ -21,10 +24,12 @@ async function check(params: any) {
     if (need_to_buy) {
       const order = await exchange.createMarketBuyOrder(params.symbol, params.amount_asset);
       const order_info = {
+        time,
         in_asset: params.fund, in_amount: order.cost,
         out_asset: params.asset, out_amount: order.amount,
         price: order.price, fee: order.fee,
       };
+      message(order_info);
     }
   } catch (e) {
     console.log(e);
