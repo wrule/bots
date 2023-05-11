@@ -37,9 +37,9 @@ async function main() {
   const ticker = await exchange.fetchTicker(params.symbol);
   params.less_than_dst = params.less_than / ticker.ask;
   params.amount_dst = params.amount / ticker.ask;
-  console.log(asset, '当前价格: ', ticker.ask, fund);
-  console.log('以当前价格确定的持仓基线', params.less_than_dst, asset);
-  console.log('以当前价格确定的单笔追加额', params.amount_dst, asset);
+  console.log(asset, 'current price: ', ticker.ask, fund);
+  console.log('current price baseline', params.less_than_dst, asset);
+  console.log('current price amount', params.amount_dst, asset);
   console.log(params);
   check(params);
 }
