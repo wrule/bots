@@ -24,7 +24,7 @@ async function check(params: any) {
     if (need_to_buy) {
       const order = await exchange.createMarketBuyOrder(params.symbol, params.amount_asset);
       const order_info = {
-        time,
+        type: `${params.symbol}_charger_fp_buy`, time,
         in_asset: params.fund, in_amount: order.cost,
         out_asset: params.asset, out_amount: order.amount,
         price: order.price, fee: order.fee,
