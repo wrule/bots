@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Bot, SpotFull, TC, t, FillParams, DingTalk, ccxt, SpotReal, KLineWatcherRT, OHLCV, KLineWatcher, ExFactory } from 'litebot';
 
 export
