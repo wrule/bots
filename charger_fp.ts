@@ -14,6 +14,9 @@ async function check(params: any) {
       'baseline', params.baseline_asset,
       need_to_buy ? 'need to buy' : 'no need to buy',
     );
+    if (need_to_buy) {
+      const order = await exchange.createMarketBuyOrder(params.symbol, params.amount_asset);
+    }
   } catch (e) {
     console.log(e);
   }
