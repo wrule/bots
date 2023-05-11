@@ -7,7 +7,12 @@ const exchange = ExFactory({ ...secret.exchange });
 async function check(params: any) {
   try {
     const balance = await exchange.fetchFreeBalance();
-    console.log(balance[params.asset]);
+    console.log(
+      params.asset, '持仓', balance[params.asset],
+      balance[params.asset] < params.less_than_dst ? '<' : '>=',
+      '基线', params.less_than_dst,
+      balance[params.asset] < params.less_than_dst ? '需要加仓' : '无需加仓',
+    );
   } catch (e) {
     console.log(e);
   }
