@@ -25,12 +25,13 @@ async function main() {
     params.symbol = `${params.symbol}/USDT`;
     console.log(params);
   }
+  const [token_asset, token_fund] = params.symbol.split('/');
   const ticker = await exchange.fetchTicker(params.symbol);
-  console.log(ticker.ask);
   const less_than_dst = params.less_than / ticker.ask;
   const amount_dst = params.amount / ticker.ask;
-  console.log('以当前价格确定的持仓基线', less_than_dst);
-  console.log('以当前价格确定的单笔追加额', amount_dst);
+  console.log(token_asset, '当前价格: ', ticker.ask, token_fund);
+  console.log('以当前价格确定的持仓基线', less_than_dst, token_asset);
+  console.log('以当前价格确定的单笔追加额', amount_dst, token_asset);
   // check();
 }
 
