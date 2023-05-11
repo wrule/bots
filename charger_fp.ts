@@ -27,6 +27,10 @@ async function main() {
   }
   const ticker = await exchange.fetchTicker(params.symbol);
   console.log(ticker.ask);
+  const less_than_dst = params.less_than / ticker.ask;
+  const amount_dst = params.amount / ticker.ask;
+  console.log('以当前价格确定的持仓基线', less_than_dst);
+  console.log('以当前价格确定的单笔追加额', amount_dst);
   // check();
 }
 
