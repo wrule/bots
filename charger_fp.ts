@@ -7,11 +7,12 @@ const exchange = ExFactory({ ...secret.exchange });
 async function check(params: any) {
   try {
     const balance = await exchange.fetchFreeBalance();
+    const need_to_buy = balance[params.asset] < params.baseline_asset;
     console.log(
       params.asset, 'position', balance[params.asset],
-      balance[params.asset] < params.baseline_asset ? '<' : '>=',
+      need_to_buy ? '<' : '>=',
       'baseline', params.baseline_asset,
-      balance[params.asset] < params.baseline_asset ? 'need to buy' : 'no need to buy',
+      need_to_buy ? 'need to buy' : 'no need to buy',
     );
   } catch (e) {
     console.log(e);
