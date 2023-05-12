@@ -17,8 +17,12 @@ async function LoadBigJsonArray(path: string) {
     if (line) {
       if (line.endsWith(','))
         line = line.slice(0, line.length - 1);
-      const row = JSON.parse(line);
-      result.push(row);
+      try {
+        const row = JSON.parse(line);
+        result.push(row);
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
   console.log('file read complete');
