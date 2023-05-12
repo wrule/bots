@@ -2,8 +2,16 @@
 import fs from 'fs';
 import { createInterface } from 'readline';
 
-async function LoadBigJsonArray(path: string) {
-  const result: any[] = [];
+interface AB {
+  time: number;
+  ask: number;
+  ask_volume: number;
+  bid: number;
+  bid_volume: number;
+}
+
+async function LoadBigJsonArray<T>(path: string, mapper = (row: any) => row as T) {
+  const result: T[] = [];
   const readline = createInterface({
     input: fs.createReadStream(path),
     crlfDelay: Infinity,
@@ -18,7 +26,7 @@ async function LoadBigJsonArray(path: string) {
       if (line.endsWith(','))
         line = line.slice(0, line.length - 1);
       try {
-        const row = JSON.parse(line);
+        const row = mapper(JSON.parse(line));
         result.push(row);
       } catch (e) {
         console.log(e);
@@ -30,9 +38,17 @@ async function LoadBigJsonArray(path: string) {
   return result;
 }
 
+function ArrayToAB(array: number[]) {
+  return {
+    time: array[0],
+    ask: array[1], ask_volume: array[2],
+    bid: array[3], bid_volume: array[4],
+  } as AB;
+}
+
 async function main() {
-  const list = await LoadBigJsonArray('./data//ethusdt-1683364860372.json');
-  console.log(list.length);
+  const array = await LoadBigJsonArray('./data/ethusdt-1683364860372.json', ArrayToAB);
+  console.log(array.length);
 }
 
 main();
