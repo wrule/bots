@@ -41,9 +41,9 @@ async function check(params: any) {
 async function main() {
   const params: any = {
     symbol: 'BNB/USDT',
-    baseline: 22,
+    baseline: 33,
     amount: 11,
-    interval: 2 * 60 * 60 * 1000,
+    interval: 10 * 60 * 1000,
   };
   FillParams(params);
   if (!/^\S+\/\S+$/.test(params.symbol)) {
