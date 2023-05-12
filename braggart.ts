@@ -2,13 +2,13 @@
 import fs from 'fs';
 import { createInterface } from 'readline';
 
-async function loadBigJsonArray(path: string) {
-  console.log(`start reading ${path}`);
+async function LoadBigJsonArray(path: string) {
   const result: any[] = [];
   const readline = createInterface({
     input: fs.createReadStream(path),
     crlfDelay: Infinity,
   });
+  console.log(`start reading ${path}`);
   let count = 0;
   for await (let line of readline) {
     count++;
@@ -26,7 +26,7 @@ async function loadBigJsonArray(path: string) {
 }
 
 async function main() {
-  const list = await loadBigJsonArray('./data//ethusdt-1683364860372.json');
+  const list = await LoadBigJsonArray('./data//ethusdt-1683364860372.json');
   console.log(list.length);
 }
 
