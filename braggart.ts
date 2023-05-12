@@ -25,6 +25,7 @@ async function LoadBigJsonArray(path: string) {
       }
     }
   }
+  console.log('rows: ', result.length);
   console.log('file read complete');
   return result;
 }
