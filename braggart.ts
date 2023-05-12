@@ -50,8 +50,12 @@ function ArrayToAB(array: number[]) {
 }
 
 async function main() {
-  const array = await LoadBigJsonArray('./data/ethusdt-1683364860372.json', ArrayToAB);
-  console.log(array[0]);
+  const data = await LoadBigJsonArray('./data/ethusdt-1683364860372.json', ArrayToAB);
+  let sum = 0;
+  data.forEach((ab) => {
+    sum += ab.ask;
+  });
+  console.log(sum);
 }
 
 main();
