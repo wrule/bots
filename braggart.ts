@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'fs';
 import { createInterface } from 'readline';
+import { SpotSimpleTest } from 'litebot';
 
 interface AB {
   time: number;
@@ -51,11 +52,25 @@ function ArrayToAB(array: number[]) {
 
 async function main() {
   const data = await LoadBigJsonArray('./data/ethusdt-1683364860372.json', ArrayToAB);
-  let sum = 0;
-  data.forEach((ab) => {
-    sum += ab.ask;
+  const bot = new SpotSimpleTest(1000, 0.001);
+  let holding = false;
+  let transactions = 0;
+  data.forEach((ab, index) => {
+    if (holding) {
+      const take_price = bot.Offset(0.0015);
+      const stop_price = bot.Offset(-0.001);
+      if (ab.bid >= take_price || ab.bid <= stop_price) {
+        bot.SellAll(ab.bid);
+        holding = false;
+        transactions++;
+      }
+    } else {
+      bot.BuyAll(ab.ask);
+      holding = true;
+      transactions++;
+    }
   });
-  console.log(sum);
+  console.log(bot.Valuation(1800), transactions);
 }
 
 main();
