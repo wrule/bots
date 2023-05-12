@@ -56,8 +56,8 @@ async function main() {
   params.baseline_asset = params.baseline / ticker.ask;
   params.amount_asset = params.amount / ticker.ask;
   console.log(asset, 'current price: ', ticker.ask, fund);
-  console.log('current price baseline', params.baseline_asset, asset);
-  console.log('current price amount', params.amount_asset, asset);
+  console.log('current price baseline: ', params.baseline_asset, asset);
+  console.log('current price amount: ', params.amount_asset, asset);
   console.log(params);
   check(params);
 }
