@@ -10,7 +10,10 @@ interface AB {
   bid_volume: number;
 }
 
-async function LoadBigJsonArray<T>(path: string, mapper = (row: any) => row as T) {
+async function LoadBigJsonArray<T>(
+  path: string,
+  mapper: (row: any) => T = (row: any) => row,
+) {
   const result: T[] = [];
   const readline = createInterface({
     input: fs.createReadStream(path),
