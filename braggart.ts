@@ -51,7 +51,7 @@ function ArrayToAB(array: number[]) {
 
 async function main() {
   const array = await LoadBigJsonArray('./data/ethusdt-1683364860372.json', ArrayToAB);
-  console.log(array.length);
+  console.log(array[0]);
 }
 
 main();
