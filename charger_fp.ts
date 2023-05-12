@@ -29,6 +29,7 @@ async function check(params: any) {
         out_asset: params.asset, out_amount: order.amount,
         price: order.price, fee: order.fee,
       };
+      console.log(order_info);
       message(order_info);
     }
   } catch (e) {
