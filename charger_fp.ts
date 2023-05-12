@@ -42,7 +42,7 @@ async function main() {
     symbol: 'BNB/USDT',
     baseline: 22,
     amount: 11,
-    interval: 6 * 60 * 60 * 1000,
+    interval: 2 * 60 * 60 * 1000,
   };
   FillParams(params);
   if (!/^\S+\/\S+$/.test(params.symbol)) {
