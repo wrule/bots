@@ -54,20 +54,16 @@ async function main() {
   const data = await LoadBigJsonArray('./data/ethusdt-1683364860372.json', ArrayToAB);
   const bot = new SpotSimpleTest(1000, 0.001);
   let holding = false;
-  let transactions = 0;
-  data.forEach((ab, index) => {
+  data.forEach((ab) => {
     if (holding) {
-      const take_price = bot.Offset(0.01);
-      const stop_price = bot.Offset(-0.003);
-      if (ab.bid >= take_price || ab.bid <= stop_price) {
+      const risk = bot.Risk(ab.bid);
+      if (risk >= 0.01 || risk <= -0.003) {
         bot.SellAll(ab.bid);
         holding = false;
-        transactions++;
       }
     } else {
       bot.BuyAll(ab.ask);
       holding = true;
-      transactions++;
     }
   });
   const days = (data[data.length - 1].time - data[0].time) / (1000 * 60 * 60 * 24);
