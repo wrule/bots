@@ -70,7 +70,7 @@ async function main() {
       transactions++;
     }
   });
-  console.log(bot.Valuation(1800) + bot.ExtFeeCount * 0.35, transactions);
+  console.log(bot.ValuationNet(1800, 0.35));
 }
 
 main();
