@@ -57,7 +57,7 @@ async function main() {
   let transactions = 0;
   data.forEach((ab, index) => {
     if (holding) {
-      const take_price = bot.Offset(0.0015);
+      const take_price = bot.Offset(0.005);
       const stop_price = bot.Offset(-0.001);
       if (ab.bid >= take_price || ab.bid <= stop_price) {
         bot.SellAll(ab.bid);
@@ -70,7 +70,7 @@ async function main() {
       transactions++;
     }
   });
-  console.log(bot.Valuation(1800), transactions);
+  console.log(bot.Valuation(1800) + bot.ExtFeeCount * 0.35, transactions);
 }
 
 main();
