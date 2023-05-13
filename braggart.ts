@@ -70,7 +70,8 @@ async function main() {
       transactions++;
     }
   });
-  console.log(bot.ROI(1766.64));
+  const days = (data[data.length - 1].time - data[0].time) / (1000 * 60 * 60 * 24);
+  console.log(bot.ROI(1766.64), bot.Transactions, bot.Transactions / days);
 }
 
 main();
