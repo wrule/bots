@@ -58,7 +58,7 @@ async function main() {
   data.forEach((ab, index) => {
     if (holding) {
       const take_price = bot.Offset(0.01);
-      const stop_price = bot.Offset(-0.001);
+      const stop_price = bot.Offset(-0.003);
       if (ab.bid >= take_price || ab.bid <= stop_price) {
         bot.SellAll(ab.bid);
         holding = false;
@@ -71,7 +71,7 @@ async function main() {
     }
   });
   const days = (data[data.length - 1].time - data[0].time) / (1000 * 60 * 60 * 24);
-  console.log(bot.ROI(1766.64), bot.Transactions, bot.Transactions / days);
+  console.log(bot.ROINet(1766.64, 0.35), bot.Transactions, bot.Transactions / days);
 }
 
 main();
