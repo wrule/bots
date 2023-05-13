@@ -57,7 +57,7 @@ async function main() {
   data.forEach((ab) => {
     if (holding) {
       const risk = bot.Risk(ab.bid);
-      if (risk >= 0.01 || risk <= -0.003) {
+      if (risk >= 0.01 || risk <= -0.002) {
         bot.SellAll(ab.bid);
         holding = false;
       }
@@ -67,7 +67,7 @@ async function main() {
     }
   });
   const days = (data[data.length - 1].time - data[0].time) / (1000 * 60 * 60 * 24);
-  console.log(bot.ROINet(1766.64, 0.35), bot.Transactions, bot.Transactions / days);
+  console.log(bot.ROI(1766.64), bot.Transactions, bot.Transactions / days);
 }
 
 main();
