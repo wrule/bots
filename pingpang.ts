@@ -46,6 +46,7 @@ function test(data: AB[], params: Params) {
     bot.ExtFeeCount * 0.35,
     bot.ExtFeeCount * 0.35 / days,
   );
+  return { roi: bot.ROI(last_ab.bid), transactions: bot.Transactions };
 }
 
 async function main() {
