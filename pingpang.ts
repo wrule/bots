@@ -1,10 +1,17 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --max-old-space-size=12288
 import { SpotSimpleTest } from 'litebot';
 import { LoadBigJsonArray } from './utils/json';
 import { ArrayToAB } from './utils/ab';
+import moment from 'moment';
 
 async function main() {
   const data = await LoadBigJsonArray('./data/ethusdt-1683364860372.json', ArrayToAB);
+  if (data.length > 0) {
+    const start_time = moment(new Date(data[0].time)).format('YYYY-MM-DD HH:mm:ss');
+    const end_time = moment(new Date(data[data.length - 1].time)).format('YYYY-MM-DD HH:mm:ss');
+    console.log(start_time, '~', end_time);
+  }
+  return;
   const bot = new SpotSimpleTest(1000, 0.00075);
   let holding = false;
   let lock_time = 0;
