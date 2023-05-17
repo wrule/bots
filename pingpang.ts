@@ -1,11 +1,10 @@
 #!/usr/bin/env node --max-old-space-size=12288
-import { SpotSimpleTest } from 'litebot';
+import { Random, SpotSimpleTest } from 'litebot';
 import { LoadBigJsonArray } from './utils/json';
 import { AB, ArrayToAB } from './utils/ab';
 import moment from 'moment';
 
 interface Params {
-  fee: number;
   stop: number;
   take: number;
 }
@@ -13,7 +12,7 @@ interface Params {
 enum BotMode { Normal, Stubborn, Giveup, Optimism, Aggressive };
 
 function test(data: AB[], params: Params) {
-  const bot = new SpotSimpleTest(1000, params.fee);
+  const bot = new SpotSimpleTest(1000, 0.001);
   let holding = false;
   let mode = BotMode.Normal;
   const buy_all = (ab: AB) => {
@@ -39,13 +38,14 @@ function test(data: AB[], params: Params) {
   });
   const last_ab = data[data.length - 1];
   const days = (last_ab.time - data[0].time) / (1000 * 60 * 60 * 24);
-  console.log(
-    bot.ROI(last_ab.bid),
-    bot.Transactions,
-    bot.Transactions / days,
-    bot.ExtFeeCount * 0.35,
-    bot.ExtFeeCount * 0.35 / days,
-  );
+  // console.log(
+  //   'test:',
+  //   bot.ROI(last_ab.bid),
+  //   bot.Transactions,
+  //   bot.Transactions / days,
+  //   bot.ExtFeeCount * 0.35,
+  //   bot.ExtFeeCount * 0.35 / days,
+  // );
   return { roi: bot.ROI(last_ab.bid), transactions: bot.Transactions };
 }
 
@@ -57,9 +57,29 @@ async function main() {
     console.log(start_time, '~', end_time);
   }
   test(data, {
-    fee: 0.001,
     stop: -0.005,
     take: 0.01,
+  });
+
+  const random = new Random<Params>();
+  random.Search({
+    domain: {
+      stop: [1, 200],
+      take: [10, 500],
+    },
+    mapper: (parmas) => ({ stop: -(parmas.stop / 1000), take: parmas.take / 1000 }),
+    filter: (params) => Math.abs(params.take) > Math.abs(params.stop),
+    target: (params) => {
+      const result = test(data, params);
+      if (result.transactions < 100) return  -Infinity;
+      if (result.roi < -0.3) return -Infinity;
+      console.log('result:', params, result);
+      return result.roi;
+      // const executor = new SpotSimpleTest();
+      // const bot = new StochRSICross(executor, params);
+      // bot.BackTestingBatch(kline);
+      // return executor.ROI(kline[kline.length - 1].close);
+    },
   });
 }
 
