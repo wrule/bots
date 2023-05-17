@@ -1,22 +1,7 @@
 #!/usr/bin/env node
 import { SpotSimpleTest } from 'litebot';
 import { LoadBigJsonArray } from './utils/json';
-
-interface AB {
-  time: number;
-  ask: number;
-  ask_volume: number;
-  bid: number;
-  bid_volume: number;
-}
-
-function ArrayToAB(array: number[]) {
-  return {
-    time: array[0],
-    ask: array[1], ask_volume: array[2],
-    bid: array[3], bid_volume: array[4],
-  } as AB;
-}
+import { ArrayToAB } from './utils/ab';
 
 async function main() {
   const data = await LoadBigJsonArray('./data/ethusdt-1683364860372.json', ArrayToAB);
