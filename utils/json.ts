@@ -13,6 +13,7 @@ async function LoadBigJsonArray<T>(
   });
   console.log(`start reading ${path}`);
   let count = 0;
+  const timing_time = Number(new Date());
   for await (let line of readline) {
     count++;
     if (count % 100000 === 1) console.log('rows: ', count);
@@ -29,6 +30,6 @@ async function LoadBigJsonArray<T>(
     }
   }
   console.log('rows: ', result.length);
-  console.log('file read complete');
+  console.log('file read complete', (Number(new Date()) - timing_time) / 1000, 's');
   return result;
 }
