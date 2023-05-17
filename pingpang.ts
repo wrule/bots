@@ -21,7 +21,7 @@ function test(data: AB[], params: Params) {
     holding = true;
   };
   const sell_all = (ab: AB) => {
-    bot.SellAll(ab.ask);
+    bot.SellAll(ab.bid);
     holding = false;
   };
   data.forEach((ab) => {
@@ -57,8 +57,8 @@ async function main() {
   }
   test(data, {
     fee: 0.001,
-    stop: 0.001,
-    take: 0.007,
+    stop: -0.005,
+    take: 0.01,
   });
 }
 
