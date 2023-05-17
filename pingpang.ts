@@ -10,23 +10,31 @@ interface Params {
   take: number;
 }
 
+enum BotMode { Normal, Stubborn, Giveup, Optimism, Aggressive };
+
 function test(data: AB[], params: Params) {
   const bot = new SpotSimpleTest(1000, params.fee);
   let holding = false;
+  let mode = BotMode.Normal;
+  const buy_all = (ab: AB) => {
+    bot.BuyAll(ab.ask);
+    holding = true;
+  };
+  const sell_all = (ab: AB) => {
+    bot.SellAll(ab.ask);
+    holding = false;
+  };
   data.forEach((ab) => {
     if (holding) {
       const risk = bot.Risk(ab.bid);
       if (risk >= params.take) {
-        bot.SellAll(ab.bid);
-        holding = false;
+        sell_all(ab);
       }
       if (risk <= params.stop) {
-        bot.SellAll(ab.bid);
-        holding = false;
+        sell_all(ab);
       }
     } else {
-      bot.BuyAll(ab.ask);
-      holding = true;
+      buy_all(ab);
     }
   });
   const last_ab = data[data.length - 1];
@@ -50,7 +58,7 @@ async function main() {
   test(data, {
     fee: 0.001,
     stop: 0.001,
-    take: 0.001,
+    take: 0.007,
   });
 }
 
