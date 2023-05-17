@@ -4,17 +4,23 @@ import { LoadBigJsonArray } from './utils/json';
 import { AB, ArrayToAB } from './utils/ab';
 import moment from 'moment';
 
-function test(data: AB[]) {
-  const bot = new SpotSimpleTest(1000, 0.001);
+interface Params {
+  fee: number;
+  stop: number;
+  take: number;
+}
+
+function test(data: AB[], params: Params) {
+  const bot = new SpotSimpleTest(1000, params.fee);
   let holding = false;
   data.forEach((ab) => {
     if (holding) {
       const risk = bot.Risk(ab.bid);
-      if (risk >= 0.01) {
+      if (risk >= params.take) {
         bot.SellAll(ab.bid);
         holding = false;
       }
-      if (risk <= -0.001) {
+      if (risk <= params.stop) {
         bot.SellAll(ab.bid);
         holding = false;
       }
@@ -41,7 +47,11 @@ async function main() {
     const end_time = moment(new Date(data[data.length - 1].time)).format('YYYY-MM-DD HH:mm:ss');
     console.log(start_time, '~', end_time);
   }
-  test(data);
+  test(data, {
+    fee: 0.001,
+    stop: 0.001,
+    take: 0.001,
+  });
 }
 
 main();
