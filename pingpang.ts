@@ -27,9 +27,9 @@ function test(data: AB[]) {
   const days = (last_ab.time - data[0].time) / (1000 * 60 * 60 * 24);
   console.log(
     bot.ROI(last_ab.bid),
-    bot.ROINet(last_ab.bid),
     bot.Transactions,
     bot.Transactions / days,
+    bot.ExtFeeCount * 0.35,
     bot.ExtFeeCount * 0.35 / days,
   );
 }
