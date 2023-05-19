@@ -9,12 +9,9 @@ interface Params {
   take: number;
 }
 
-enum BotMode { Normal, Stubborn, Giveup, Optimism, Aggressive };
-
 function test(data: AB[], params: Params) {
   const bot = new SpotSimpleTest(1000, 0.001);
   let holding = false;
-  let mode = BotMode.Normal;
   const buy_all = (ab: AB) => {
     bot.BuyAll(ab.ask);
     holding = true;
@@ -24,17 +21,7 @@ function test(data: AB[], params: Params) {
     holding = false;
   };
   data.forEach((ab) => {
-    if (holding) {
-      const risk = bot.Risk(ab.bid);
-      if (risk >= params.take) {
-        sell_all(ab);
-      }
-      if (risk <= params.stop) {
-        sell_all(ab);
-      }
-    } else {
-      buy_all(ab);
-    }
+
   });
   const last_ab = data[data.length - 1];
   const days = (last_ab.time - data[0].time) / (1000 * 60 * 60 * 24);
