@@ -20,8 +20,10 @@ function test(data: AB[], params: Params) {
     bot.SellAll(ab.bid);
     holding = false;
   };
+  let prev_ab: AB;
   data.forEach((ab) => {
-
+    if (!prev_ab) return;
+    prev_ab = ab;
   });
   const last_ab = data[data.length - 1];
   const days = (last_ab.time - data[0].time) / (1000 * 60 * 60 * 24);
