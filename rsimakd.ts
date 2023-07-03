@@ -31,7 +31,8 @@ extends Bot<TC, Signal> {
   }
 
   public get length() {
-    return t.sma_start(this.params.slow_period) +
+    return t.rsi_start(this.params.rsi_period) +
+      t.sma_start(this.params.slow_period) +
       t.sma_start(this.params.k_period) +
       t.sma_start(this.params.d_period) + 2;
   }
