@@ -24,7 +24,7 @@ extends OHLCV {
 }
 
 export
-class MAKD
+class RSIMAKD
 extends Bot<TC, Signal> {
   public constructor(private readonly executor: SpotFull, private readonly params: Params) {
     super();
@@ -115,6 +115,6 @@ extends Bot<TC, Signal> {
   console.log('loading market...');
   await exchange.loadMarkets();
   const executor = new SpotReal({ exchange, notifier, ...params });
-  const bot = new MAKD(executor, params);
+  const bot = new RSIMAKD(executor, params);
   (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
 })();
