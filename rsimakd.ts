@@ -4,6 +4,7 @@ import moment from 'moment';
 
 export
 interface Params {
+  rsi_period: number;
   fast_period: number;
   slow_period: number;
   k_period: number;
@@ -38,7 +39,8 @@ extends Bot<TC, Signal> {
   public next(tcs: TC[], queue: Signal[]) {
     const result = queue.concat(tcs as Signal[]);
     const closed = result.filter((item) => item.closed);
-    const source = closed.map((item) => item.close);
+    let source = closed.map((item) => item.close);
+    source = t.rsi(source, this.params.rsi_period);
     const slow_line = t.sma(source, this.params.slow_period);
     const fast_line = t.sma(source, this.params.fast_period, slow_line.length);
     const diff = fast_line.map((item, index) => item - slow_line[index]);
@@ -90,6 +92,7 @@ extends Bot<TC, Signal> {
     name: '跟风狗',
     symbol: 'ETH/USDT',
     timeframe: '1m',
+    rsi_period: 10,
     fast_period: 33,
     slow_period: 80,
     k_period: 72,
