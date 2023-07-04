@@ -1,19 +1,27 @@
 #!/usr/bin/env node
-import { ArrayToKLine, Random, SpotSimpleTest } from 'litebot';
+import { ArrayToKLine, Random, SpotSimpleTest, TC } from 'litebot';
 import { RSIMAKD, Params } from '../rsimakd';
+import moment from 'moment';
 
 const data = require('../data/BTC_USDT-30m.json');
 
+export
+function Slice<T extends TC>(tcs: T[], start?: any, end?: any) {
+  const start_timestamp = start != null ? moment(start).valueOf() : -Infinity;
+  const end_timestamp = end != null ? moment(end).valueOf() : Infinity;
+  return tcs.filter((tc) => tc.time >= start_timestamp && tc.time <= end_timestamp);
+}
+
 function main() {
-  const kline = ArrayToKLine(data, false);
+  const kline = Slice(ArrayToKLine(data, false), '2019-08', '2026');
   const random = new Random<Params>();
   random.Search({
     domain: {
-      rsi_period: [2, 150],
-      fast_period: [2, 150],
-      slow_period: [2, 150],
-      k_period: [2, 150],
-      d_period: [2, 150],
+      rsi_period: [2, 60],
+      fast_period: [2, 60],
+      slow_period: [2, 60],
+      k_period: [2, 60],
+      d_period: [2, 60],
     },
     target: (params) => {
       const executor = new SpotSimpleTest();
