@@ -13,7 +13,7 @@ function Slice<T extends TC>(tcs: T[], start?: any, end?: any) {
 }
 
 function main() {
-  const kline = Slice(ArrayToKLine(data, false), '2019-08', '2026');
+  const kline = Slice(ArrayToKLine(data, false), '2009', '2026');
   const random = new Random<Params>();
   random.Search({
     domain: {
