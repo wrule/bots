@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Bot, DingTalk, FillParams, KLineWatcher, KLineWatcherRT, SpotFull, SpotReal, TC, ccxt, t, OHLCV, ExFactory } from 'litebot';
+import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC, t, OHLCV } from 'litebot';
 import { WSFuturesKLineWatcher } from '@litebot/ws-futureskline-watcher';
 import { CreateBinanceFuturesLong, FullTrader } from '@litebot/trader';
 
@@ -94,16 +94,14 @@ extends Bot<TC, Signal> {
     final_price: NaN,
     last_action: '',
     init_valuation: NaN,
-    rt: false,
     countdown: 8 * 1e3,
     interval: 1000,
   };
   FillParams(params);
   const notifier = new DingTalk(secret.notifier);
-  const exchange = ExFactory(secret.exchange);
   console.log('loading market...');
-  await exchange.loadMarkets();
+  const exchange = await CreateBinanceFuturesLong(secret.exchange);
   const executor = new SpotReal({ exchange, notifier, ...params });
   const bot = new StochRSICross(executor, params);
-  (params.rt ? new KLineWatcherRT() : new KLineWatcher(params.countdown)).RunBot({ exchange, bot, ...params });
+  new KLineWatcher(params.countdown).RunBot({ exchange, bot, ...params });
 })();
