@@ -27,7 +27,7 @@ extends OHLCV {
 export
 class StochRSICross
 extends Bot<TC, Signal> {
-  public constructor(private readonly executor: SpotFull, private readonly params: Params) {
+  public constructor(private readonly trader: FullTrader, private readonly params: Params) {
     super();
   }
 
@@ -59,21 +59,14 @@ extends Bot<TC, Signal> {
     return result;
   }
 
-  private stop(signal: Signal) {
-    const stop_price = this.executor.Offset(-this.params.stop_rate);
-    const take_price = this.executor.Offset(this.params.take_rate);
-    const need_stop = signal.close <= stop_price;
-    const need_take = signal.close >= take_price;
-    if (need_stop) this.executor.SellAll(signal.opened ? signal.close : stop_price);
-    else if (need_take) this.executor.SellAll(signal.opened ? signal.close : take_price);
-    return need_stop || need_take;
-  }
-
   public exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
-    if (this.stop(signal)) return;
-    if (signal.sell) this.executor.SellAll(signal.close);
-    else if (signal.buy) this.executor.BuyAll(signal.close);
+    if (signal.sell) {
+      this.trader.MarketCloseFull('');
+    }
+    else if (signal.buy) {
+      this.trader.MarketOpenFull('');
+    }
   }
 }
 
@@ -108,10 +101,9 @@ extends Bot<TC, Signal> {
     [market.quote]: params.funds,
   });
   console.log(trader.States());
+  const bot = new StochRSICross(trader, params);
+
   WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
     console.log(candle);
   }, 60 * 1e3, -1);
-  const executor = new SpotReal({ exchange, notifier, ...params });
-  // const bot = new StochRSICross(executor, params);
-  // new KLineWatcher(params.countdown).RunBot({ exchange, bot, ...params });
 })();
