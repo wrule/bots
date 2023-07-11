@@ -111,7 +111,7 @@ extends Bot<TC, Signal> {
   WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
     console.log(candle);
   }, 60 * 1e3, -1);
-  // const executor = new SpotReal({ exchange, notifier, ...params });
+  const executor = new SpotReal({ exchange, notifier, ...params });
   // const bot = new StochRSICross(executor, params);
   // new KLineWatcher(params.countdown).RunBot({ exchange, bot, ...params });
 })();
