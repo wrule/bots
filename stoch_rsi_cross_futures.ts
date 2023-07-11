@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import 'global-agent/bootstrap';
-import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC, t, OHLCV } from 'litebot';
+import { Bot, DingTalk, FillParams, TC, t, OHLCV, ArrayToKLine } from 'litebot';
 import { WSFuturesKLineWatcher } from '@litebot/ws-futureskline-watcher';
 import { CreateBinanceFuturesLong, FullTrader } from '@litebot/trader';
 
@@ -104,7 +104,18 @@ extends Bot<TC, Signal> {
   const bot = new StochRSICross(trader, params);
 
   WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
-    console.log(candle);
-    bot.Update(candle, true, true);
+    if (candle.time) {
+      bot.Update(candle);
+    } else {
+      setTimeout(async () => {
+        const data = await exchange.Exchange.fetchOHLCV(
+          params.symbol,
+          params.timeframe, undefined, bot.length + 1,
+        );
+        data.splice(data.length - 1, 1);
+        const kline = ArrayToKLine(data);
+        kline.forEach((ohlcv) => bot.Update(ohlcv, false, false));
+      }, 1000);
+    }
   }, 60 * 1e3, -1);
 })();
