@@ -62,10 +62,10 @@ extends Bot<TC, Signal> {
   public exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
     if (signal.sell) {
-      this.trader.MarketCloseFull('');
+      this.trader.MarketCloseFull((this.params as any).symbol);
     }
     else if (signal.buy) {
-      this.trader.MarketOpenFull('');
+      this.trader.MarketOpenFull((this.params as any).symbol);
     }
   }
 }
