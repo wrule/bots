@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import 'global-agent/bootstrap';
 import { Bot, DingTalk, FillParams, KLineWatcher, SpotFull, SpotReal, TC, t, OHLCV } from 'litebot';
 import { WSFuturesKLineWatcher } from '@litebot/ws-futureskline-watcher';
 import { CreateBinanceFuturesLong, FullTrader } from '@litebot/trader';
@@ -78,7 +79,7 @@ extends Bot<TC, Signal> {
 
 (async () => {
   if (require.main !== module) return;
-  const secret = require('./.secret.json');
+  const secret = require('./.secret.binance.json');
   const params = {
     name: '合约红眼',
     symbol: 'ETH/USDT',
@@ -101,9 +102,15 @@ extends Bot<TC, Signal> {
   const notifier = new DingTalk(secret.notifier);
   console.log('loading market...');
   const exchange = await CreateBinanceFuturesLong(secret.exchange);
-  WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
-    console.log(candle);
-  }, 60 * 1e3, -1);
+  const market = exchange.Exchange.market(params.symbol);
+  const trader = new FullTrader(exchange, {
+    [market.base]: params.assets,
+    [market.quote]: params.funds,
+  });
+  console.log(trader.States());
+  // WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
+  //   console.log(candle);
+  // }, 60 * 1e3, -1);
   // const executor = new SpotReal({ exchange, notifier, ...params });
   // const bot = new StochRSICross(executor, params);
   // new KLineWatcher(params.countdown).RunBot({ exchange, bot, ...params });
