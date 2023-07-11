@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import { Bot, DingTalk, FillParams, KLineWatcher, KLineWatcherRT, SpotFull, SpotReal, TC, ccxt, t, OHLCV, ExFactory } from 'litebot';
+import { WSFuturesKLineWatcher } from '@litebot/ws-futureskline-watcher';
+import { CreateBinanceFuturesLong, FullTrader } from '@litebot/trader';
 
 export
 interface Params {
@@ -78,7 +80,7 @@ extends Bot<TC, Signal> {
   if (require.main !== module) return;
   const secret = require('./.secret.json');
   const params = {
-    name: '红眼',
+    name: '合约红眼',
     symbol: 'ETH/USDT',
     timeframe: '1m',
     rsi_period: 2,
