@@ -103,7 +103,6 @@ extends Bot<TC, Signal> {
   });
   console.log(trader.States());
   const bot = new StochRSICross(trader, params);
-
   WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
     if (candle.open) {
       console.log({
