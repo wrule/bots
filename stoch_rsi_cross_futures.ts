@@ -101,6 +101,9 @@ extends Bot<TC, Signal> {
   const notifier = new DingTalk(secret.notifier);
   console.log('loading market...');
   const exchange = await CreateBinanceFuturesLong(secret.exchange);
+  WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
+    console.log(candle);
+  }, 60 * 1e3, -1);
   // const executor = new SpotReal({ exchange, notifier, ...params });
   // const bot = new StochRSICross(executor, params);
   // new KLineWatcher(params.countdown).RunBot({ exchange, bot, ...params });
