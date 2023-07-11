@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import 'global-agent/bootstrap';
-import { Bot, DingTalk, FillParams, TC, t, OHLCV, ArrayToKLine, TimeframeToMS } from 'litebot';
+import { Bot, DingTalk, FillParams, TC, t, OHLCV, ArrayToKLine, TimeframeToMS, KLineWatcher } from 'litebot';
 import { WSFuturesKLineWatcher } from '@litebot/ws-futureskline-watcher';
 import { CreateBinanceFuturesLong, FullTrader } from '@litebot/trader';
 import moment from 'moment';
@@ -105,20 +105,21 @@ extends Bot<TC, Signal> {
   });
   console.log(trader.States());
   const bot = new StochRSICross(trader, params);
-  WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
-    if (candle.open) {
-      (candle as any).closed = true;
-      bot.Update(candle);
-    } else {
-      setTimeout(async () => {
-        const data = await exchange.Exchange.fetchOHLCV(
-          params.symbol,
-          params.timeframe, undefined, bot.length + 1,
-        );
-        data.splice(data.length - 1, 1);
-        const kline = ArrayToKLine(data);
-        kline.forEach((ohlcv) => bot.Update(ohlcv, false, false));
-      }, 1000);
-    }
-  }, TimeframeToMS(params.timeframe), -1);
+  new KLineWatcher(params.countdown).RunBot({ exchange: exchange.Exchange, bot, ...params });
+  // WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
+  //   if (candle.open) {
+  //     (candle as any).closed = true;
+  //     bot.Update(candle);
+  //   } else {
+  //     setTimeout(async () => {
+  //       const data = await exchange.Exchange.fetchOHLCV(
+  //         params.symbol,
+  //         params.timeframe, undefined, bot.length + 1,
+  //       );
+  //       data.splice(data.length - 1, 1);
+  //       const kline = ArrayToKLine(data);
+  //       kline.forEach((ohlcv) => bot.Update(ohlcv, false, false));
+  //     }, 1000);
+  //   }
+  // }, TimeframeToMS(params.timeframe), -1);
 })();
