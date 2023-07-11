@@ -28,7 +28,11 @@ extends OHLCV {
 export
 class StochRSICross
 extends Bot<TC, Signal> {
-  public constructor(private readonly trader: FullTrader, private readonly params: Params) {
+  public constructor(
+    private readonly trader: FullTrader,
+    private readonly params: Params,
+    private readonly message?: (data: any) => void,
+  ) {
     super();
   }
 
@@ -63,12 +67,18 @@ extends Bot<TC, Signal> {
   public exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
     if (signal.sell) {
-      console.log('卖');
-      // this.trader.MarketCloseFull((this.params as any).symbol);
+      this.trader.MarketCloseFull((this.params as any).symbol)
+        .then((order) => {
+          this.message?.(order);
+          this.message?.(this.trader.States());
+        });
     }
     else if (signal.buy) {
-      console.log('买');
-      // this.trader.MarketOpenFull((this.params as any).symbol);
+      this.trader.MarketOpenFull((this.params as any).symbol)
+        .then((order) => {
+          this.message?.(order);
+          this.message?.(this.trader.States());
+        });
     }
   }
 }
@@ -104,7 +114,9 @@ extends Bot<TC, Signal> {
     [market.quote]: params.funds,
   });
   console.log(trader.States());
-  const bot = new StochRSICross(trader, params);
+  const bot = new StochRSICross(trader, params, (data: any) =>
+    notifier.SendMessage(JSON.stringify(data, null, 2))
+  );
   new KLineWatcher(params.countdown).RunBot({ exchange: exchange.Exchange, bot, ...params });
   // WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
   //   if (candle.open) {
