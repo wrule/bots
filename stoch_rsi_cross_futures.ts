@@ -63,10 +63,12 @@ extends Bot<TC, Signal> {
   public exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
     if (signal.sell) {
-      this.trader.MarketCloseFull((this.params as any).symbol);
+      console.log('卖');
+      // this.trader.MarketCloseFull((this.params as any).symbol);
     }
     else if (signal.buy) {
-      this.trader.MarketOpenFull((this.params as any).symbol);
+      console.log('买');
+      // this.trader.MarketOpenFull((this.params as any).symbol);
     }
   }
 }
@@ -78,13 +80,13 @@ extends Bot<TC, Signal> {
     name: '合约红眼',
     symbol: 'ETH/USDT',
     timeframe: '1m',
-    rsi_period: 2,
-    stoch_period: 3,
-    k_period: 4,
-    d_period: 5,
+    rsi_period: 13,
+    stoch_period: 45,
+    k_period: 32,
+    d_period: 45,
     stop_rate: 1,
     take_rate: 1e6,
-    funds: 11,
+    funds: 20,
     assets: 0,
     final_price: NaN,
     last_action: '',
@@ -105,11 +107,8 @@ extends Bot<TC, Signal> {
   const bot = new StochRSICross(trader, params);
   WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
     if (candle.open) {
-      console.log({
-        ...candle,
-        time: moment(candle.time).format('YYYY-MM-DD HH:mm:ss'),
-      });
-      // bot.Update(candle);
+      (candle as any).closed = true;
+      bot.Update(candle);
     } else {
       setTimeout(async () => {
         const data = await exchange.Exchange.fetchOHLCV(
