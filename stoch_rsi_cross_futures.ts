@@ -105,5 +105,6 @@ extends Bot<TC, Signal> {
 
   WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
     console.log(candle);
+    bot.Update(candle, true, true);
   }, 60 * 1e3, -1);
 })();
