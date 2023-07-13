@@ -31,7 +31,6 @@ extends Bot<TC, Signal> {
   public constructor(
     private readonly trader: FullTrader,
     private readonly params: Params,
-    private readonly message?: (data: any) => void,
   ) {
     super();
   }
@@ -67,20 +66,10 @@ extends Bot<TC, Signal> {
   public exec(signal: Signal) {
     if (!signal.closed) this.queue.pop();
     if (signal.sell) {
-      this.trader.MarketCloseFull((this.params as any).symbol)
-        .then((order) => {
-          this.message?.(order);
-          this.message?.(this.trader.States());
-        })
-        .catch((e) => this.message?.(e));
+      this.trader.MarketCloseFull((this.params as any).symbol);
     }
     else if (signal.buy) {
-      this.trader.MarketOpenFull((this.params as any).symbol)
-        .then((order) => {
-          this.message?.(order);
-          this.message?.(this.trader.States());
-        })
-        .catch((e) => this.message?.(e));
+      this.trader.MarketOpenFull((this.params as any).symbol);
     }
   }
 }
@@ -111,14 +100,12 @@ extends Bot<TC, Signal> {
   console.log('loading market...');
   const exchange = await CreateBinanceFuturesLong(secret.exchange);
   const market = exchange.Exchange.market(params.symbol);
-  const trader = new FullTrader(exchange, {
+  const trader = new FullTrader(params.name, exchange, {
     [market.base]: params.assets,
     [market.quote]: params.funds,
-  });
+  }, (data) => notifier.SendMessage(data));
   console.log(trader.States());
-  const bot = new StochRSICross(trader, params, (data: any) =>
-    notifier.SendMessage(JSON.stringify(data, null, 2))
-  );
+  const bot = new StochRSICross(trader, params);
   new KLineWatcher(params.countdown).RunBot({ exchange: exchange.Exchange, bot, ...params });
   // WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
   //   if (candle.open) {
