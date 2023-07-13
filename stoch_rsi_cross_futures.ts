@@ -71,14 +71,16 @@ extends Bot<TC, Signal> {
         .then((order) => {
           this.message?.(order);
           this.message?.(this.trader.States());
-        });
+        })
+        .catch((e) => this.message?.(e));
     }
     else if (signal.buy) {
       this.trader.MarketOpenFull((this.params as any).symbol)
         .then((order) => {
           this.message?.(order);
           this.message?.(this.trader.States());
-        });
+        })
+        .catch((e) => this.message?.(e));
     }
   }
 }
