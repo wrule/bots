@@ -104,7 +104,7 @@ extends Bot<TC, Signal> {
     [market.base]: params.assets,
     [market.quote]: params.funds,
   }, (data) => notifier.SendMessage(data));
-  console.log(trader.States());
+  console.log(trader.Assets());
   const bot = new StochRSICross(trader, params);
   new KLineWatcher(params.countdown).RunBot({ exchange: exchange.Exchange, bot, ...params });
   // WSFuturesKLineWatcher(exchange.Exchange, params.symbol, (candle) => {
