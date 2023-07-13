@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import 'global-agent/bootstrap';
-import { Bot, DingTalk, FillParams, TC, t, OHLCV, ArrayToKLine, TimeframeToMS, KLineWatcher } from 'litebot';
+import { Bot, DingTalk, FillParams, TC, t, OHLCV, ArrayToKLine, TimeframeToMS, KLineWatcher, ccxt } from 'litebot';
 import { WSFuturesKLineWatcher } from '@litebot/ws-futureskline-watcher';
 import { CreateBinanceFuturesLong, FullTrader } from '@litebot/trader';
 import moment from 'moment';
@@ -76,6 +76,7 @@ extends Bot<TC, Signal> {
 
 (async () => {
   if (require.main !== module) return;
+  console.log(ccxt.version);
   const secret = require('./.secret.json');
   const params = {
     name: '合约红眼',
