@@ -76,7 +76,7 @@ extends Bot<TC, Signal> {
 
 (async () => {
   if (require.main !== module) return;
-  const secret = require('./.secret.binance.json');
+  const secret = require('./.secret.json');
   const params = {
     name: '合约红眼',
     symbol: 'ETH/USDT',
