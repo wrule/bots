@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import 'global-agent/bootstrap';
 import { Bot, DingTalk, FillParams, TC, t, OHLCV, ArrayToKLine, TimeframeToMS, KLineWatcher, ccxt } from 'litebot';
-import { WSFuturesKLineWatcher } from '@litebot/ws-futureskline-watcher';
 import { CreateBinanceFuturesLong, FullTrader } from '@litebot/trader';
 import moment from 'moment';
 
