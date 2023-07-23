@@ -31,7 +31,7 @@ extends Bot<TC, Signal> {
   }
 
   public get length() {
-    return (t.rsi_start(this.params.rsi_period) + this.params.slow_period + this.params.k_period + this.params.d_period
+    return (t.rsi_start(this.params.rsi_period) + this.params.slow_period + this.params.fast_period + this.params.k_period + this.params.d_period
     + 2) * 4;
   }
 
@@ -41,12 +41,12 @@ extends Bot<TC, Signal> {
     const source = closed.map((item) => item.close);
     const rsi_result = t.rsi(source, this.params.rsi_period)
     
-    const slow_line = t.sma(rsi_result, this.params.slow_period);
-    const fast_line = t.sma(rsi_result, this.params.fast_period, slow_line.length);;
+    // const slow_line = t.sma(rsi_result, this.params.slow_period);
+    // const fast_line = t.sma(rsi_result, this.params.fast_period, slow_line.length);;
 
-    // const fast_line = t.sma(rsi_result, this.params.fast_period);;
-    // const slow_line = t.sma(fast_line, this.params.slow_period);
-    // t._align([fast_line, slow_line], slow_line.length)
+    const fast_line = t.sma(rsi_result, this.params.fast_period);;
+    const slow_line = t.sma(fast_line, this.params.slow_period);
+    t._align([fast_line, slow_line], slow_line.length)
     
     const diff = fast_line.map((item, index) => item - slow_line[index]);
     const k = t.sma(diff, this.params.k_period);
