@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { ArrayToKLine, ExpandKLine, SpotSimpleTest, TC } from 'litebot';
+import { ArrayToKLine, ExpandKLine, SpotSimpleTest, TC, t } from 'litebot';
 import moment from 'moment';
 import { StochRSICross } from '../stoch_rsi_cross';
 
@@ -12,7 +12,8 @@ function Slice<T extends TC>(tcs: T[], start?: any, end?: any) {
   return tcs.filter((tc) => tc.time >= start_timestamp && tc.time <= end_timestamp);
 }
 
-function main() {
+async function main() {
+  await (t as any).init?.();
   const kline = Slice(ExpandKLine(ArrayToKLine(data, false), 0.5), '2009', '2026');
   const executor = new SpotSimpleTest(100, 0.001);
   const bot = new StochRSICross(executor, {
