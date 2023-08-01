@@ -36,9 +36,9 @@ extends Bot<TC, Signal> {
     const closed = result.filter((item) => item.closed);
     const source = closed.map((item) => item.close);
     const rsi_result = t.rsi(source, this.params.rsi_period);
-    const k = t.sma(rsi_result, this.params.k_period);
-    const d = t.sma(k, this.params.d_period);
-    t._align([k, d], closed.length);
+    let k = t.sma(rsi_result, this.params.k_period);
+    let d = t.sma(k, this.params.d_period);
+    [k, d] = t._copy([k, d], closed.length);
     closed.forEach((last, index) => {
       last.k = k[index];
       last.d = d[index];

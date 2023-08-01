@@ -42,9 +42,9 @@ extends Bot<TC, Signal> {
     const slow_line = t.sma(source, this.params.slow_period);
     const fast_line = t.sma(source, this.params.fast_period, slow_line.length);
     const diff = fast_line.map((item, index) => item - slow_line[index]);
-    const k = t.sma(diff, this.params.k_period);
-    const d = t.sma(k, this.params.d_period);
-    t._align([k, d], closed.length);
+    let k = t.sma(diff, this.params.k_period);
+    let d = t.sma(k, this.params.d_period);
+    [k, d] = t._copy([k, d], closed.length);
     closed.forEach((last, index) => {
       last.k = k[index];
       last.d = d[index];
